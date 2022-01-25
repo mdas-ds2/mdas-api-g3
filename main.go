@@ -7,14 +7,26 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	pokemon "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/domain"
 )
 
 func main() {
-	pokemonName := flag.String("pokemonName", "", "The type of the pokemon we want to search for")
+	pokemonType, error := pokemon.CreatePokemonType("electric")
+	pokemonName, error := pokemon.CreatePokemonName("Pikachu")
+	pokemonTypes := []pokemon.PokemonType{*pokemonType}
+
+	pikachu, error := pokemon.CreatePokemon(*pokemonName, pokemonTypes)
+
+	if error != nil {
+		log.Fatalln(error)
+	}
+
+	pokemonNameToPrint := flag.String("pokemonName", pikachu.Name(), "The type of the pokemon we want to search for")
 
 	flag.Parse()
 
-	resp, err := http.Get("https://pokeapi.co/api/v2/pokemon/" + *pokemonName)
+	resp, err := http.Get("https://pokeapi.co/api/v2/pokemon/" + *pokemonNameToPrint)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -32,14 +44,5 @@ func main() {
 
 	json.Unmarshal(body, &result)
 
-	var pokemonTypes string
-
-	for index, value := range result.Types {
-		if index > 0 {
-			pokemonTypes += ", "
-		}
-		pokemonTypes += value.Type.Name
-	}
-
-	fmt.Println(pokemonTypes)
+	fmt.Println(pikachu.GetStringFormatedTypes())
 }
