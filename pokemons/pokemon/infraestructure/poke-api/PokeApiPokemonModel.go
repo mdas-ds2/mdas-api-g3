@@ -1,4 +1,4 @@
-package main
+package pokemon
 
 // Ability is a single ability.
 type Ability struct {
