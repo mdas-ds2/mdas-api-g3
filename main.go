@@ -12,37 +12,49 @@ import (
 )
 
 func main() {
-	pokemonType, error := pokemon.CreatePokemonType("electric")
-	pokemonName, error := pokemon.CreatePokemonName("Pikachu")
-	pokemonTypes := []pokemon.PokemonType{*pokemonType}
-
-	pikachu, error := pokemon.CreatePokemon(*pokemonName, pokemonTypes)
-
-	if error != nil {
-		log.Fatalln(error)
-	}
-
-	pokemonNameToPrint := flag.String("pokemonName", pikachu.Name(), "The type of the pokemon we want to search for")
-
+	pokemonNameInput := flag.String("pokemonName", "", "The type of the pokemon we want to search for")
 	flag.Parse()
 
-	resp, err := http.Get("https://pokeapi.co/api/v2/pokemon/" + *pokemonNameToPrint)
+	pokemonName, err := pokemon.CreatePokemonName(*pokemonNameInput)
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	defer resp.Body.Close()
+	pokemonApiResponse, err := http.Get("https://pokeapi.co/api/v2/pokemon/" + pokemonName.GetValue())
 
-	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer pokemonApiResponse.Body.Close()
+
+	responseBody, err := ioutil.ReadAll(pokemonApiResponse.Body)
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	var result Pokemon
+	json.Unmarshal(responseBody, &result)
 
-	json.Unmarshal(body, &result)
+	var pokemonTypes = []pokemon.PokemonType{}
 
-	fmt.Println(pikachu.GetStringFormatedTypes())
+	for _, pokemonType := range result.Types {
+		pokemonTypeType, err := pokemon.CreatePokemonType(pokemonType.Type.Name)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		pokemonTypes = append(pokemonTypes, *pokemonTypeType)
+	}
+
+	pokemon, err := pokemon.CreatePokemon(*pokemonName, pokemonTypes)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(pokemon.GetStringFormatedTypes())
 }
