@@ -1,4 +1,4 @@
-package pokemon
+package pokeApi
 
 import (
 	"encoding/json"

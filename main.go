@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"log"
 
-	application "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/application"
+	pokemonUseCases "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/application"
 	pokemon "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/domain"
-	infra "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/infraestructure/poke-api"
+	pokeApi "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/infrastructure/poke-api"
 )
 
 func main() {
-	pokemonNameInput := flag.String("pokemonName", "", "The type of the pokemon we want to search for")
+	pokemonNameInput := flag.String("getPokemonTypes", "", "Get pokemon types passing the pokemon name")
 	flag.Parse()
 
 	pokemonName, err := pokemon.CreatePokemonName(*pokemonNameInput)
@@ -20,9 +20,13 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	repo := infra.PokeApiRepository{}
+	pokeApiRepository := pokeApi.PokeApiRepository{}
 
-	getTypeByNameUseCase := application.GetTypeByName{repo}
+	getTypesByName := pokemonUseCases.GetTypesByName{
+		PokemonRepository: pokeApiRepository,
+	}
 
-	fmt.Println(getTypeByNameUseCase.Execute(*pokemonName))
+	pokemonTypes := getTypesByName.Execute(*pokemonName)
+
+	fmt.Println(pokemonTypes)
 }
