@@ -9,9 +9,9 @@ import (
 	pokemon "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/domain"
 )
 
-type PokeApiRepository struct{}
+type PokeApiPokemonRepository struct{}
 
-func (pokeApiRepository PokeApiRepository) FindByName(pokemonName pokemon.PokemonName) pokemon.Pokemon {
+func (pokeApiRepository PokeApiPokemonRepository) FindByName(pokemonName pokemon.PokemonName) pokemon.Pokemon {
 	pokemonApiResponse, err := http.Get("https://pokeapi.co/api/v2/pokemon/" + pokemonName.GetValue())
 
 	if err != nil {

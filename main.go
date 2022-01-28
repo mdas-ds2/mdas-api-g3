@@ -20,7 +20,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	pokeApiRepository := pokeApi.PokeApiRepository{}
+	pokeApiRepository := pokeApi.PokeApiPokemonRepository{}
 
 	getTypesByName := pokemonUseCases.GetTypesByName{
 		PokemonRepository: pokeApiRepository,
