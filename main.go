@@ -11,13 +11,14 @@ import (
 )
 
 func main() {
+	// TODO: Separate this responsability
 	pokemonNameInput := flag.String("getPokemonTypes", "", "Get pokemon types passing the pokemon name")
 	flag.Parse()
 
-	pokemonName, err := pokemon.CreatePokemonName(*pokemonNameInput)
+	pokemonName, errorOnCreatePokemonName := pokemon.CreatePokemonName(*pokemonNameInput)
 
-	if err != nil {
-		log.Fatalln(err)
+	if errorOnCreatePokemonName != nil {
+		log.Fatalln(errorOnCreatePokemonName)
 	}
 
 	pokeApiRepository := pokeApi.PokeApiPokemonRepository{}

@@ -48,9 +48,9 @@ type Ability struct {
 		} `json:"language"`
 		Name string `json:"name"`
 	} `json:"names"`
-	Pokemon []struct {
-		IsHidden bool `json:"is_hidden"`
-		Pokemon  struct {
+	PokemonModel []struct {
+		IsHidden     bool `json:"is_hidden"`
+		PokemonModel struct {
 			Name string `json:"name"`
 			URL  string `json:"url"`
 		} `json:"pokemon"`
@@ -193,8 +193,8 @@ type PokeathlonStat struct {
 	} `json:"names"`
 }
 
-// Pokemon is a single Pokemon.
-type Pokemon struct {
+// PokemonModel is a single PokemonModel.
+type PokemonModel struct {
 	Abilities []struct {
 		Ability struct {
 			Name string `json:"name"`
@@ -271,7 +271,7 @@ type Pokemon struct {
 	Weight int `json:"weight"`
 }
 
-// PokemonColor is a single Pokemon color.
+// PokemonColor is a single PokemonModel color.
 type PokemonColor struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
@@ -288,7 +288,7 @@ type PokemonColor struct {
 	} `json:"pokemon_species"`
 }
 
-// PokemonForm is a single Pokemon form.
+// PokemonForm is a single PokemonModel form.
 type PokemonForm struct {
 	FormName     string        `json:"form_name"`
 	FormNames    []interface{} `json:"form_names"`
@@ -300,7 +300,7 @@ type PokemonForm struct {
 	Name         string        `json:"name"`
 	Names        []interface{} `json:"names"`
 	Order        int           `json:"order"`
-	Pokemon      struct {
+	PokemonModel struct {
 		Name string `json:"name"`
 		URL  string `json:"url"`
 	} `json:"pokemon"`
@@ -316,7 +316,7 @@ type PokemonForm struct {
 	} `json:"version_group"`
 }
 
-// PokemonHabitat is a single Pokemon habitat.
+// PokemonHabitat is a single PokemonModel habitat.
 type PokemonHabitat struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
@@ -333,7 +333,7 @@ type PokemonHabitat struct {
 	} `json:"pokemon_species"`
 }
 
-// PokemonShape is a single Pokemon shape.
+// PokemonShape is a single PokemonModel shape.
 type PokemonShape struct {
 	AwesomeNames []struct {
 		AwesomeName string `json:"awesome_name"`
@@ -357,7 +357,7 @@ type PokemonShape struct {
 	} `json:"pokemon_species"`
 }
 
-// PokemonSpecies is a single Pokemon species.
+// PokemonSpecies is a single PokemonModel species.
 type PokemonSpecies struct {
 	BaseHappiness int `json:"base_happiness"`
 	CaptureRate   int `json:"capture_rate"`
@@ -439,8 +439,8 @@ type PokemonSpecies struct {
 		URL  string `json:"url"`
 	} `json:"shape"`
 	Varieties []struct {
-		IsDefault bool `json:"is_default"`
-		Pokemon   struct {
+		IsDefault    bool `json:"is_default"`
+		PokemonModel struct {
 			Name string `json:"name"`
 			URL  string `json:"url"`
 		} `json:"pokemon"`
@@ -530,8 +530,8 @@ type Type struct {
 		} `json:"language"`
 		Name string `json:"name"`
 	} `json:"names"`
-	Pokemon []struct {
-		Pokemon struct {
+	PokemonModel []struct {
+		PokemonModel struct {
 			Name string `json:"name"`
 			URL  string `json:"url"`
 		} `json:"pokemon"`

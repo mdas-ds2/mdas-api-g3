@@ -12,39 +12,43 @@ import (
 type PokeApiPokemonRepository struct{}
 
 func (pokeApiRepository PokeApiPokemonRepository) FindByName(pokemonName pokemon.PokemonName) pokemon.Pokemon {
-	pokemonApiResponse, err := http.Get("https://pokeapi.co/api/v2/pokemon/" + pokemonName.GetValue())
+	// TODO: Pass http as dependency (create own http service that also contains the body parsing logic)
+	// TODO: Assign api url to a constant variable
+	response, errorOnResponse := http.Get("https://pokeapi.co/api/v2/pokemon/" + pokemonName.GetValue())
 
-	if err != nil {
-		log.Fatalln(err)
+	if errorOnResponse != nil {
+		log.Fatalln(errorOnResponse)
 	}
 
-	defer pokemonApiResponse.Body.Close()
+	defer response.Body.Close()
 
-	responseBody, err := ioutil.ReadAll(pokemonApiResponse.Body)
+	responseBody, errorOnResponseBody := ioutil.ReadAll(response.Body)
 
-	if err != nil {
-		log.Fatalln(err)
+	if errorOnResponseBody != nil {
+		log.Fatalln(errorOnResponseBody)
 	}
 
-	var result Pokemon
-	json.Unmarshal(responseBody, &result)
+	// TODO: Separate this responsability
+	var pokemonResponse PokemonModel
+	json.Unmarshal(responseBody, &pokemonResponse)
 
+	// TODO: Try to encapsulate this logic: Mapper at infra level
 	var pokemonTypes = []pokemon.PokemonType{}
 
-	for _, pokemonType := range result.Types {
-		pokemonTypeType, err := pokemon.CreatePokemonType(pokemonType.Type.Name)
+	for _, pokemonTypeResponse := range pokemonResponse.Types {
+		pokemonType, errorOnCreatePokemonType := pokemon.CreatePokemonType(pokemonTypeResponse.Type.Name)
 
-		if err != nil {
-			log.Fatalln(err)
+		if errorOnCreatePokemonType != nil {
+			log.Fatalln(errorOnCreatePokemonType)
 		}
 
-		pokemonTypes = append(pokemonTypes, *pokemonTypeType)
+		pokemonTypes = append(pokemonTypes, *pokemonType)
 	}
 
-	pokemon, err := pokemon.CreatePokemon(pokemonName, pokemonTypes)
+	pokemon, errOnCreatePokemon := pokemon.CreatePokemon(pokemonName, pokemonTypes)
 
-	if err != nil {
-		log.Fatalln(err)
+	if errOnCreatePokemon != nil {
+		log.Fatalln(errOnCreatePokemon)
 	}
 
 	return *pokemon
