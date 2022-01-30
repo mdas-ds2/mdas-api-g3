@@ -27,7 +27,11 @@ func main() {
 		PokemonRepository: pokeApiRepository,
 	}
 
-	pokemonTypes := getTypesByName.Execute(*pokemonName)
+	pokemonTypes, errorOnGetPokemonTypes := getTypesByName.Execute(*pokemonName)
+
+	if errorOnCreatePokemonName != nil {
+		log.Fatalln(errorOnGetPokemonTypes)
+	}
 
 	fmt.Println(pokemonTypes)
 }
