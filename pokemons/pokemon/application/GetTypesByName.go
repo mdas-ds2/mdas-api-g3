@@ -8,11 +8,17 @@ type GetTypesByName struct {
 	PokemonRepository pokemon.PokemonRepository
 }
 
-func (getTypesByName GetTypesByName) Execute(name pokemon.PokemonName) (string, error) {
-	pokemon, error := getTypesByName.PokemonRepository.FindByName(name)
+func (getTypesByName GetTypesByName) Execute(name string) (string, error) {
+	pokemonName, errorOnCreatePokemonName := pokemon.CreatePokemonName(name)
 
-	if error != nil {
-		return "", error
+	if errorOnCreatePokemonName != nil {
+		return "", errorOnCreatePokemonName
+	}
+
+	pokemon, errorOnFindingPokemon := getTypesByName.PokemonRepository.FindByName(*pokemonName)
+
+	if errorOnFindingPokemon != nil {
+		return "", errorOnFindingPokemon
 	}
 
 	return pokemon.GetStringFormatedTypes(), nil
