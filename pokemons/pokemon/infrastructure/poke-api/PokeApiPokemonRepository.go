@@ -10,11 +10,12 @@ type PokeApiPokemonRepository struct{}
 const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/"
 
 func (pokeApiRepository PokeApiPokemonRepository) FindByName(pokemonName pokemon.PokemonName) (pokemon.Pokemon, error) {
-	responseBody, errorGetHttpPokeApi := generic.HttpGet(pokeApiUrl + pokemonName.GetValue())
+	urlPath := pokeApiUrl + pokemonName.GetValue()
+	response, errorOnResponse := generic.HttpGet(urlPath)
 
-	if errorGetHttpPokeApi != nil {
-		return pokemon.Pokemon{}, errorGetHttpPokeApi
+	if errorOnResponse != nil {
+		return pokemon.Pokemon{}, errorOnResponse
 	}
 
-	return mapResponseToPokemon(pokemonName, responseBody)
+	return mapResponseToPokemon(pokemonName, response)
 }
