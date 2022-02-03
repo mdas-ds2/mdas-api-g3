@@ -24,5 +24,5 @@ func (command GetTypesByNameCommand) Run() {
 		log.Fatalln(errorOnGetPokemonTypes)
 	}
 
-	console.Print(pokemonTypes[0].GetName())
+	console.Print(pokemonTypes.GetValues()[0].GetName())
 }

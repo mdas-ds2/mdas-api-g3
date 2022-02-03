@@ -9,12 +9,12 @@ type PokeApiPokemonTypesRepository struct{}
 
 const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/"
 
-func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemonName(pokemonName pokemonTypes.PokemonName) ([]pokemonTypes.PokemonType, error) {
+func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemonName(pokemonName pokemonTypes.PokemonName) (pokemonTypes.PokemonTypes, error) {
 	urlPath := pokeApiUrl + pokemonName.GetValue()
 	response, errorOnResponse := http.Get(urlPath)
 
 	if errorOnResponse != nil {
-		return nil, errorOnResponse
+		return pokemonTypes.PokemonTypes{}, errorOnResponse
 	}
 
 	return mapResponseToPokemonTypes(pokemonName, response)
