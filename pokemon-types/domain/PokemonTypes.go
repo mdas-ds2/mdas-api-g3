@@ -15,7 +15,5 @@ func (pokemonTypes PokemonTypes) GetValues() []PokemonType {
 }
 
 func (pokemonTypes *PokemonTypes) Add(pokemonType PokemonType) {
-
 	pokemonTypes.values = append(pokemonTypes.values, pokemonType)
-	println(pokemonType.name.GetValue())
 }
