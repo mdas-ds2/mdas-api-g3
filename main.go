@@ -3,25 +3,25 @@ package main
 import (
 	"log"
 
-	pokemonUseCases "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/application"
-	console "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/infrastructure/console"
-	pokeApi "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon/infrastructure/poke-api"
+	console "github.com/mdas-ds2/mdas-api-g3/generic/infrastructure/console"
+	pokemonTypeUseCases "github.com/mdas-ds2/mdas-api-g3/pokemon-types/application"
+	pokeApi "github.com/mdas-ds2/mdas-api-g3/pokemon-types/infrastructure/poke-api"
 )
 
 func main() {
 	pokemonNameInput := console.NewInputParameter("getPokemonTypes", "Get pokemon types passing the pokemon name")
 
-	pokeApiRepository := pokeApi.PokeApiPokemonRepository{}
+	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
 
-	getTypesByName := pokemonUseCases.GetTypesByName{
-		PokemonRepository: pokeApiRepository,
+	getByPokemonName := pokemonTypeUseCases.GetByPokemonName{
+		PokemonTypeRepository: pokeApiPokemonTypeRepository,
 	}
 
-	pokemonTypes, errorOnGetPokemonTypes := getTypesByName.Execute(pokemonNameInput)
+	pokemonTypes, errorOnGetPokemonTypes := getByPokemonName.Execute(pokemonNameInput)
 
 	if errorOnGetPokemonTypes != nil {
 		log.Fatalln(errorOnGetPokemonTypes)
 	}
 
-	console.Print(pokemonTypes)
+	console.Print(pokemonTypes[0].GetName())
 }

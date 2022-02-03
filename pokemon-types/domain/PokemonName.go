@@ -1,4 +1,4 @@
-package pokemon
+package pokemonType
 
 import "errors"
 
