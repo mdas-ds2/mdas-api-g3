@@ -6,6 +6,7 @@ import (
 	console "github.com/mdas-ds2/mdas-api-g3/generic/infrastructure/console"
 	pokemonTypeUseCases "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/application"
 	pokeApi "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/infrastructure/poke-api"
+	transformers "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/infrastructure/transformers"
 )
 
 type GetTypesByName struct{}
@@ -23,6 +24,6 @@ func (command GetTypesByName) Run() {
 	if errorOnGetPokemonTypes != nil {
 		log.Fatalln(errorOnGetPokemonTypes)
 	}
-
-	console.Print(pokemonTypes[0].GetName())
+	pokemonTypesToString := transformers.PokemonTypesToString{}
+	console.Print(pokemonTypesToString.Parse(pokemonTypes))
 }

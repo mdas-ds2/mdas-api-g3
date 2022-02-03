@@ -8,26 +8,27 @@ import (
 
 type PokeApiResponse = []byte
 
-func mapResponseToPokemonTypes(pokemonName pokemonTypes.PokemonName, pokeApiResponse PokeApiResponse) ([]pokemonTypes.PokemonType, error) {
+func mapResponseToPokemonTypes(pokemonName pokemonTypes.PokemonName, pokeApiResponse PokeApiResponse) (pokemonTypes.PokemonTypes, error) {
 	var pokemonResponse PokemonModel
 	json.Unmarshal(pokeApiResponse, &pokemonResponse)
 
-	var types = []pokemonTypes.PokemonType{}
+	var pTypes = pokemonTypes.PokemonTypes{}
+	types := pTypes.Create()
 
 	for _, pokemonTypeResponse := range pokemonResponse.Types {
 		pokemonTypeName, errorOnCreatePokemonTypeName := pokemonTypes.CreatePokemonTypeName(pokemonTypeResponse.Type.Name)
 
 		if errorOnCreatePokemonTypeName != nil {
-			return nil, errorOnCreatePokemonTypeName
+			return pokemonTypes.PokemonTypes{}, errorOnCreatePokemonTypeName
 		}
 
 		pokemonType, errorOnCreatePokemonType := pokemonTypes.CreatePokemonType(*pokemonTypeName)
 
 		if errorOnCreatePokemonType != nil {
-			return nil, errorOnCreatePokemonType
+			return pokemonTypes.PokemonTypes{}, errorOnCreatePokemonType
 		}
 
-		types = append(types, *pokemonType)
+		types.Add(*pokemonType)
 	}
 
 	return types, nil
