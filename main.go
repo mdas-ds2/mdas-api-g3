@@ -5,6 +5,5 @@ import (
 )
 
 func main() {
-	getTypesByPokemonNameCommand := pokemonTypeCommand.GetTypesByName{}
-	getTypesByPokemonNameCommand.Run()
+	(pokemonTypeCommand.GetTypesByName{}).Run()
 }
