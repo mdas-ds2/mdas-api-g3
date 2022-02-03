@@ -12,7 +12,8 @@ func mapResponseToPokemonTypes(pokemonName pokemonTypes.PokemonName, pokeApiResp
 	var pokemonResponse PokemonModel
 	json.Unmarshal(pokeApiResponse, &pokemonResponse)
 
-	var types = pokemonTypes.PokemonTypes{}
+	var pTypes = pokemonTypes.PokemonTypes{}
+	types := pTypes.Create()
 
 	for _, pokemonTypeResponse := range pokemonResponse.Types {
 		pokemonTypeName, errorOnCreatePokemonTypeName := pokemonTypes.CreatePokemonTypeName(pokemonTypeResponse.Type.Name)
