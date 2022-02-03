@@ -2,7 +2,7 @@ package pokeApi
 
 import (
 	http "github.com/mdas-ds2/mdas-api-g3/generic/infrastructure/http"
-	pokemonTypes "github.com/mdas-ds2/mdas-api-g3/pokemon-types/domain"
+	pokemonTypes "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/domain"
 )
 
 type PokeApiPokemonTypesRepository struct{}

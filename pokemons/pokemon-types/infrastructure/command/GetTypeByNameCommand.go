@@ -4,13 +4,13 @@ import (
 	"log"
 
 	console "github.com/mdas-ds2/mdas-api-g3/generic/infrastructure/console"
-	pokemonTypeUseCases "github.com/mdas-ds2/mdas-api-g3/pokemon-types/application"
-	pokeApi "github.com/mdas-ds2/mdas-api-g3/pokemon-types/infrastructure/poke-api"
+	pokemonTypeUseCases "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/application"
+	pokeApi "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/infrastructure/poke-api"
 )
 
-type GetTypesByNameCommand struct{}
+type GetTypesByName struct{}
 
-func (command GetTypesByNameCommand) Run() {
+func (command GetTypesByName) Run() {
 	pokemonNameInput := console.NewInputParameter("getPokemonTypes", "Get pokemon types passing the pokemon name")
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
 
