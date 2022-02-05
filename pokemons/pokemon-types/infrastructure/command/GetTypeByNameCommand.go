@@ -24,6 +24,8 @@ func (command GetTypesByName) Run() {
 	if errorOnGetPokemonTypes != nil {
 		log.Fatalln(errorOnGetPokemonTypes)
 	}
+
 	pokemonTypesToString := transformers.PokemonTypesToString{}
+
 	console.Print(pokemonTypesToString.Parse(pokemonTypes))
 }
