@@ -18,11 +18,12 @@ func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, re
 	const POKEMON_URL_PATH_SEGMENT_POSITION = 2
 
 	if request.Method == http.MethodGet {
+		// TODO: Separate this responsibility
 		urlPathSegments := strings.Split(request.URL.Path, "/")
 		pokemonName := urlPathSegments[POKEMON_URL_PATH_SEGMENT_POSITION]
 
+		// TODO: Composition
 		pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
-
 		getByPokemonName := pokemonTypeUseCases.GetByPokemonName{
 			PokemonTypeRepository: pokeApiPokemonTypeRepository,
 		}
