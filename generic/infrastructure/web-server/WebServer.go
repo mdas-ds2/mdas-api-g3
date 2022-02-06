@@ -6,8 +6,6 @@ import (
 	"strconv"
 )
 
-type HttpHandler = func(http.ResponseWriter, *http.Request)
-
 type WebServerController interface {
 	Handler(http.ResponseWriter, *http.Request)
 	GetPattern() string
@@ -16,9 +14,9 @@ type WebServerController interface {
 type WebServer struct{}
 
 func (webServer WebServer) Listen(port int) {
-	PORT_PARAM := ":" + strconv.Itoa(port)
+	portParam := ":" + strconv.Itoa(port)
 
-	log.Fatal(http.ListenAndServe(PORT_PARAM, nil))
+	log.Fatal(http.ListenAndServe(portParam, nil))
 }
 
 func (webServer WebServer) Register(controller WebServerController) {
