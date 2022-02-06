@@ -2,11 +2,14 @@ package main
 
 import (
 	webServer "github.com/mdas-ds2/mdas-api-g3/generic/infrastructure/web-server"
-	pokemonTypeCommands "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/infrastructure/commands"
+	pokemonTypesCommands "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/infrastructure/commands"
+	pokemonTypesControllers "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/infrastructure/controllers"
 )
 
 func main() {
-	pokemonTypeCommands.GetTypesByName().Run()
+	pokemonTypesCommands.NewGetTypesByPokemonName().Run()
 
-	webServer.Create().Listen(5000)
+	server := webServer.Create()
+	server.Register(pokemonTypesControllers.NewGetTypesByPokemonName())
+	server.Listen(5000)
 }
