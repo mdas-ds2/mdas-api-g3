@@ -9,9 +9,9 @@ import (
 	transformers "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/infrastructure/transformers"
 )
 
-type GetTypesByName struct{}
+type getTypesByName struct{}
 
-func (command GetTypesByName) Run() {
+func (command getTypesByName) Run() {
 	pokemonNameInput := console.NewInputParameter("getPokemonTypes", "Get pokemon types passing the pokemon name")
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
 
@@ -28,4 +28,8 @@ func (command GetTypesByName) Run() {
 	pokemonTypesToString := transformers.PokemonTypesToString{}
 
 	console.Print(pokemonTypesToString.Parse(pokemonTypes))
+}
+
+func GetTypesByName() getTypesByName {
+	return getTypesByName{}
 }
