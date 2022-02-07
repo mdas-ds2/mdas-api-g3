@@ -5,11 +5,16 @@ import (
 	"net/http"
 )
 
-func Get(url string) ([]byte, error) {
-	response, errorOnResponse := http.Get(url)
+const SERVICE_UNAVAILABLE = 503
+const NOT_FOUND = 404
+const BAD_REQUEST = 400
+const INTERNAL_SERVER_ERROR = 500
 
-	if errorOnResponse != nil {
-		return nil, errorOnResponse
+func Get(url string) ([]byte, int, error) {
+	response, errorOnGet := http.Get(url)
+
+	if errorOnGet != nil {
+		return nil, SERVICE_UNAVAILABLE, errorOnGet
 	}
 
 	defer response.Body.Close()
@@ -17,8 +22,8 @@ func Get(url string) ([]byte, error) {
 	parsedBodyResponse, errorOnParsedBodyResponse := ioutil.ReadAll(response.Body)
 
 	if errorOnParsedBodyResponse != nil {
-		return nil, errorOnParsedBodyResponse
+		return nil, INTERNAL_SERVER_ERROR, errorOnParsedBodyResponse
 	}
 
-	return parsedBodyResponse, nil
+	return parsedBodyResponse, response.StatusCode, nil
 }
