@@ -15,11 +15,11 @@ func (command getTypesByPokemonName) Run() {
 	pokemonNameInput := console.NewInputParameter("getPokemonTypes", "Get pokemon types passing the pokemon name")
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
 
-	getByPokemonName := pokemonTypeUseCases.GetByPokemonName{
+	getByPokemonNameUseCase := pokemonTypeUseCases.GetByPokemonName{
 		PokemonTypeRepository: pokeApiPokemonTypeRepository,
 	}
 
-	pokemonTypes, errorOnGetPokemonTypes := getByPokemonName.Execute(pokemonNameInput)
+	pokemonTypes, errorOnGetPokemonTypes := getByPokemonNameUseCase.Execute(pokemonNameInput)
 
 	if errorOnGetPokemonTypes != nil {
 		log.Fatalln(errorOnGetPokemonTypes)

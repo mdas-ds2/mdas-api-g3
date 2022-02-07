@@ -18,20 +18,19 @@ type getTypesByPokemonName struct {
 const POKEMON_URL_PATH_SEGMENT_POSITION = 2
 
 func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, request *http.Request) {
-
 	if request.Method != http.MethodGet {
-		webserver.RespondJsonError(response, errors.New("Method not supported"))
+		webserver.RespondJsonError(response, errors.New("method not supported"))
 		return
 	}
 
 	pokemonName := getPokemonName(*request)
 
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
-	getByPokemonName := pokemonTypeUseCases.GetByPokemonName{
+	getByPokemonNameUseCase := pokemonTypeUseCases.GetByPokemonName{
 		PokemonTypeRepository: pokeApiPokemonTypeRepository,
 	}
 
-	pokemonTypes, errorOnGetPokemonTypes := getByPokemonName.Execute(string(pokemonName))
+	pokemonTypes, errorOnGetPokemonTypes := getByPokemonNameUseCase.Execute(string(pokemonName))
 
 	if errorOnGetPokemonTypes != nil {
 		webserver.RespondJsonError(response, errorOnGetPokemonTypes)
@@ -44,6 +43,7 @@ func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, re
 		webserver.RespondJsonError(response, errorOnGetPokemonTypes)
 		return
 	}
+
 	webserver.RespondJson(response, responseBody)
 }
 
