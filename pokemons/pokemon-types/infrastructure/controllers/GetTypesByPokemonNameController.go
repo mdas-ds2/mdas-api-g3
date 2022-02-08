@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"errors"
 	"net/http"
 	"strings"
 
@@ -16,10 +15,12 @@ type getTypesByPokemonName struct {
 }
 
 const POKEMON_URL_PATH_SEGMENT_POSITION = 2
+const POKEMON_TYPES_URL_PATTERN_SEGMENT = "/pokemon-types/"
 
 func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet {
-		webserver.RespondJsonError(response, errors.New("method not supported"))
+		methodNotSupportedException := webserver.CreateMethodNotSupportedException()
+		webserver.RespondJsonError(response, methodNotSupportedException.GetError())
 		return
 	}
 
@@ -52,7 +53,7 @@ func (controller getTypesByPokemonName) GetPattern() string {
 }
 
 func NewGetTypesByPokemonName() getTypesByPokemonName {
-	return getTypesByPokemonName{pattern: "/pokemon-types/"}
+	return getTypesByPokemonName{pattern: POKEMON_TYPES_URL_PATTERN_SEGMENT}
 }
 
 func getPokemonName(request http.Request) string {
