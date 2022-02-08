@@ -6,11 +6,11 @@ type PokemonNotFoundException struct {
 	err error
 }
 
-func CreatePokemonNotFoundException(name string) PokemonNotFoundException {
-	exception := PokemonNotFoundException{errors.New("Pokemon " + name + " not found")}
+func CreatePokemonNotFoundException(name PokemonName) PokemonNotFoundException {
+	exception := PokemonNotFoundException{errors.New("Pokemon " + name.GetValue() + " not found")}
 	return exception
 }
 
-func (pokemonNotFoundException PokemonNotFoundException) GetError() error {
-	return pokemonNotFoundException.err
+func (exception PokemonNotFoundException) GetError() error {
+	return exception.err
 }
