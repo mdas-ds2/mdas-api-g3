@@ -2,7 +2,6 @@ package pokeApi
 
 import (
 	http "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/http"
-	webServer "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/web-server"
 	pokemonTypes "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
 )
 
@@ -15,7 +14,7 @@ func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemon
 	response, statusCode, errorOnResponse := http.Get(urlPath)
 
 	if statusCode == http.SERVICE_UNAVAILABLE {
-		serviceUnavailableException := webServer.CreateServiceUnavailableException()
+		serviceUnavailableException := pokemonTypes.CreateRepositoryUnavailableException()
 		return pokemonTypes.PokemonTypes{}, serviceUnavailableException.GetError()
 	}
 
