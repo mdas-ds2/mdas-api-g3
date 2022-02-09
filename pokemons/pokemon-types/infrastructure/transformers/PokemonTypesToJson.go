@@ -12,7 +12,7 @@ func (pokemonTypesToJson PokemonTypesToJson) Parse(types pokemonType.PokemonType
 	var res = []string{}
 
 	for _, value := range types.GetValues() {
-		res = append(res, value.GetName())
+		res = append(res, value.GetName().GetValue())
 	}
 
 	jsonRes, errorOnCreatingResponse := json.Marshal(res)

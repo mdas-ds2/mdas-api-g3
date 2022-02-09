@@ -12,7 +12,7 @@ func (pokemonTypesToString PokemonTypesToString) Parse(types pokemonType.Pokemon
 		if index > 0 {
 			result += ", "
 		}
-		result += pType.GetName()
+		result += pType.GetName().GetValue()
 	}
 	return result
 }
