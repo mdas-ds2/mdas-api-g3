@@ -3,7 +3,7 @@ package pokeApi
 import (
 	"encoding/json"
 
-	pokemonTypes "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/domain"
+	pokemonTypes "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
 )
 
 type PokeApiResponse = []byte

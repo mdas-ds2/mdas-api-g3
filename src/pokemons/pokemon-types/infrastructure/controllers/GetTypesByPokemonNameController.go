@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strings"
 
-	webserver "github.com/mdas-ds2/mdas-api-g3/generic/infrastructure/web-server"
-	pokemonTypeUseCases "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/application"
-	pokeApi "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/infrastructure/poke-api"
-	transformers "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/infrastructure/transformers"
+	webserver "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/web-server"
+	pokemonTypeUseCases "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/application"
+	pokeApi "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/infrastructure/poke-api"
+	transformers "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/infrastructure/transformers"
 )
 
 type getTypesByPokemonName struct {
