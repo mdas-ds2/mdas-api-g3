@@ -1,4 +1,4 @@
-package domain
+package pokemon
 
 type Pokemon struct {
 	id Id
