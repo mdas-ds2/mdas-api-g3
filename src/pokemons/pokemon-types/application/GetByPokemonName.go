@@ -1,7 +1,7 @@
 package pokemonType
 
 import (
-	pokemonType "github.com/mdas-ds2/mdas-api-g3/pokemons/pokemon-types/domain"
+	pokemonType "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
 )
 
 type GetByPokemonName struct {
