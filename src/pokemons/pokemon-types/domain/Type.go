@@ -4,8 +4,8 @@ type PokemonType struct {
 	name PokemonTypeName
 }
 
-func (pokemonType PokemonType) GetName() string {
-	return pokemonType.name.GetValue()
+func (pokemonType PokemonType) GetName() PokemonTypeName {
+	return pokemonType.name
 }
 
 func CreatePokemonType(pokemonTypeName PokemonTypeName) (*PokemonType, error) {
