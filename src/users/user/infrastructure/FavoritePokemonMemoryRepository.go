@@ -14,9 +14,11 @@ func CreateFavoritePokemonRepository() FavoritePokemonMemoryRepository {
 }
 
 func (favoritePokemonMemoryRepository FavoritePokemonMemoryRepository) InsertFavoritePokemon(user *user.User, favoritePokemonId user.FavoritePokemonId) {
-	favoritePokemonMemoryRepository.database[user.GetId().GetValue()] = append(favoritePokemonMemoryRepository.database[user.GetId().GetValue()], favoritePokemonId)
+	userId := user.GetId().GetValue()
+	favoritePokemonMemoryRepository.database[userId] = append(favoritePokemonMemoryRepository.database[userId], favoritePokemonId)
 }
 
-func (favoritePokemonMemoryRepository FavoritePokemonMemoryRepository) GetPokemonFavotites(user user.User) []user.FavoritePokemonId {
-	return favoritePokemonMemoryRepository.database[user.GetId().GetValue()]
+func (favoritePokemonMemoryRepository FavoritePokemonMemoryRepository) GetPokemonFavorites(user user.User) []user.FavoritePokemonId {
+	userId := user.GetId().GetValue()
+	return favoritePokemonMemoryRepository.database[userId]
 }
