@@ -49,7 +49,7 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 
 	error := addFavoritePokemonUseCase.Execute(userId, requestBody.PokemonId)
 	if error != nil {
-		fmt.Println("ërror al anadir favorito")
+		fmt.Println(error.Error())
 	}
 }
 
