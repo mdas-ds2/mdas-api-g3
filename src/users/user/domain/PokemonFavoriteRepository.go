@@ -1,5 +1,6 @@
 package user
 
-type PokemonFavoriteRepository interface {
-	InsertFavoritePokemon(user User, favoritePokemonId FavoritePokemonId)
+type FavoritePokemonRepository interface {
+	Add(userId Id, favoritePokemonId FavoritePokemonId)
+	FindAll(userId Id) []FavoritePokemonId
 }

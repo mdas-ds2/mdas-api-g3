@@ -1,24 +1,31 @@
-package infraestructure
+package user
 
 import (
-	user "github.com/mdas-ds2/mdas-api-g3/src/users/user/domain"
+	userDomain "github.com/mdas-ds2/mdas-api-g3/src/users/user/domain"
 )
 
 type FavoritePokemonMemoryRepository struct {
-	database map[string][]user.FavoritePokemonId
+	database map[string][]string
 }
 
-func CreateFavoritePokemonRepository() FavoritePokemonMemoryRepository {
-	database := make(map[string][]user.FavoritePokemonId)
-	return FavoritePokemonMemoryRepository{database}
+func CreateFavoritePokemonMemoryRepository(database *map[string][]string) FavoritePokemonMemoryRepository {
+	return FavoritePokemonMemoryRepository{*database}
 }
 
-func (favoritePokemonMemoryRepository FavoritePokemonMemoryRepository) InsertFavoritePokemon(user *user.User, favoritePokemonId user.FavoritePokemonId) {
-	userId := user.GetId().GetValue()
-	favoritePokemonMemoryRepository.database[userId] = append(favoritePokemonMemoryRepository.database[userId], favoritePokemonId)
+func (repository FavoritePokemonMemoryRepository) Add(userId userDomain.Id, favoritePokemonId userDomain.FavoritePokemonId) {
+	id := userId.GetValue()
+	repository.database[id] = append(repository.database[id], favoritePokemonId.GetValue())
 }
 
-func (favoritePokemonMemoryRepository FavoritePokemonMemoryRepository) GetPokemonFavorites(user user.User) []user.FavoritePokemonId {
-	userId := user.GetId().GetValue()
-	return favoritePokemonMemoryRepository.database[userId]
+func (repository FavoritePokemonMemoryRepository) FindAll(userId userDomain.Id) []userDomain.FavoritePokemonId {
+	id := userId.GetValue()
+	favorites := repository.database[id]
+	result := []userDomain.FavoritePokemonId{}
+
+	for _, favoriteId := range favorites {
+		pokemonId := userDomain.CreatePokemonId(favoriteId)
+		result = append(result, pokemonId)
+	}
+
+	return result
 }
