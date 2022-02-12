@@ -16,7 +16,7 @@ func (command getTypesByPokemonName) Run() {
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
 
 	getByPokemonNameUseCase := pokemonTypeUseCases.GetByPokemonName{
-		PokemonTypeRepository: pokeApiPokemonTypeRepository,
+		Repository: pokeApiPokemonTypeRepository,
 	}
 
 	pokemonTypes, errorOnGetPokemonTypes := getByPokemonNameUseCase.Execute(pokemonNameInput)

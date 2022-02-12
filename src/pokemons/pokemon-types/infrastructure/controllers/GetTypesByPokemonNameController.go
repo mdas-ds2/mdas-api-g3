@@ -30,7 +30,7 @@ func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, re
 
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
 	getByPokemonNameUseCase := pokemonTypeUseCases.GetByPokemonName{
-		PokemonTypeRepository: pokeApiPokemonTypeRepository,
+		Repository: pokeApiPokemonTypeRepository,
 	}
 
 	pokemonTypes, errorOnGetPokemonTypes := getByPokemonNameUseCase.Execute(string(pokemonName))
@@ -54,7 +54,7 @@ func (controller getTypesByPokemonName) GetPattern() string {
 	return controller.pattern
 }
 
-func NewGetTypesByPokemonName() getTypesByPokemonName {
+func CreateGetTypesByPokemonName() getTypesByPokemonName {
 	return getTypesByPokemonName{pattern: POKEMON_TYPES_URL_PATTERN_SEGMENT}
 }
 
