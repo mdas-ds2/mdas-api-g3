@@ -26,7 +26,7 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 		return
 	}
 
-	userId := request.Header.Get("User-Id")
+	userId := request.Header.Get("UserId")
 
 	body, err := ioutil.ReadAll(request.Body)
 

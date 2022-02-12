@@ -1,9 +1,6 @@
 package user
 
 import (
-	"errors"
-	"fmt"
-
 	userDomain "github.com/mdas-ds2/mdas-api-g3/src/users/user/domain"
 )
 
@@ -17,9 +14,9 @@ func CreateFavoritePokemonMemoryRepository(database *map[string][]string) Favori
 
 func (repository FavoritePokemonMemoryRepository) Add(userId userDomain.Id, favoritePokemonId userDomain.FavoritePokemonId) error {
 	id := userId.GetValue()
-	fmt.Println(repository.canBeAdded(userId, favoritePokemonId))
 	if !repository.canBeAdded(userId, favoritePokemonId) {
-		return errors.New("Pokemon already in the favotite list")
+		exception := userDomain.CreateFavoritePokemonDuplicatedException(favoritePokemonId)
+		return exception.GetError()
 	}
 	repository.database[id] = append(repository.database[id], favoritePokemonId.GetValue())
 	return nil
@@ -28,8 +25,7 @@ func (repository FavoritePokemonMemoryRepository) Add(userId userDomain.Id, favo
 func (repository FavoritePokemonMemoryRepository) canBeAdded(userId userDomain.Id, favoritePokemonId userDomain.FavoritePokemonId) bool {
 	id := userId.GetValue()
 	favorites := repository.database[id]
-	fmt.Println(favorites)
-	if favorites != nil && len(favorites) == 0 {
+	if len(favorites) == 0 {
 		return true
 	}
 	for _, pokemonId := range favorites {
