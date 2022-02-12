@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -49,8 +48,10 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 
 	error := addFavoritePokemonUseCase.Execute(userId, requestBody.PokemonId)
 	if error != nil {
-		fmt.Println(error.Error())
+		webserver.RespondJsonError(response, error)
+		return
 	}
+	respond(response, "pokemon added to favorite list correctly")
 }
 
 func (controller addFavoritePokemonController) GetPattern() string {
@@ -59,4 +60,11 @@ func (controller addFavoritePokemonController) GetPattern() string {
 
 func CreateAddFavoritePokemonController() addFavoritePokemonController {
 	return addFavoritePokemonController{pattern: FAVORITE_POKEMON_URL_PATTERN_SEGMENT}
+}
+
+func respond(response http.ResponseWriter, message string) {
+	resultMap := make(map[string]string)
+	resultMap["response"] = message
+	result, _ := json.Marshal(resultMap)
+	response.Write(result)
 }

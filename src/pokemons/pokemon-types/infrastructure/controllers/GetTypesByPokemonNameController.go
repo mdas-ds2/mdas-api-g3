@@ -43,7 +43,7 @@ func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, re
 	responseBody, errorOnCreatingResponse := (transformers.PokemonTypesToJson{}).Parse(pokemonTypes)
 
 	if errorOnCreatingResponse != nil {
-		webserver.RespondJsonError(response, errorOnGetPokemonTypes)
+		webserver.RespondJsonError(response, errorOnCreatingResponse)
 		return
 	}
 
