@@ -10,11 +10,14 @@ type AddFavoritePokemon struct {
 	Repository userPkg.FavoritePokemonRepository
 }
 
-func (useCase AddFavoritePokemon) Execute(userId string, pokemonId string) {
-	useCase.Repository.Add(
+func (useCase AddFavoritePokemon) Execute(userId string, pokemonId string) error {
+	error := useCase.Repository.Add(
 		userPkg.CreateId(userId),
 		userPkg.CreatePokemonId(pokemonId),
 	)
-
+	if error != nil {
+		return error
+	}
 	fmt.Println(useCase.Repository.FindAll(userPkg.CreateId(userId)))
+	return nil
 }

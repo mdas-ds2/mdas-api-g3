@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -46,7 +47,10 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 		Repository: inMemoryRepo,
 	}
 
-	addFavoritePokemonUseCase.Execute(userId, requestBody.PokemonId)
+	error := addFavoritePokemonUseCase.Execute(userId, requestBody.PokemonId)
+	if error != nil {
+		fmt.Println("ërror al anadir favorito")
+	}
 }
 
 func (controller addFavoritePokemonController) GetPattern() string {

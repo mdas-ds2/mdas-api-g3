@@ -12,9 +12,10 @@ func CreateFavoritePokemonMemoryRepository(database *map[string][]string) Favori
 	return FavoritePokemonMemoryRepository{*database}
 }
 
-func (repository FavoritePokemonMemoryRepository) Add(userId userDomain.Id, favoritePokemonId userDomain.FavoritePokemonId) {
+func (repository FavoritePokemonMemoryRepository) Add(userId userDomain.Id, favoritePokemonId userDomain.FavoritePokemonId) error {
 	id := userId.GetValue()
 	repository.database[id] = append(repository.database[id], favoritePokemonId.GetValue())
+	return nil
 }
 
 func (repository FavoritePokemonMemoryRepository) FindAll(userId userDomain.Id) []userDomain.FavoritePokemonId {
