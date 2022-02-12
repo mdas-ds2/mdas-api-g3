@@ -14,8 +14,10 @@ type getTypesByPokemonName struct {
 	pattern string
 }
 
-const POKEMON_URL_PATH_SEGMENT_POSITION = 2
-const POKEMON_TYPES_URL_PATTERN_SEGMENT = "/pokemon-types/"
+const (
+	POKEMON_URL_PATH_SEGMENT_POSITION = 2
+	POKEMON_TYPES_URL_PATTERN_SEGMENT = "/pokemon-types/"
+)
 
 func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet {

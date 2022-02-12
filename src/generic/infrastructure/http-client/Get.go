@@ -1,20 +1,15 @@
-package generic
+package httpClient
 
 import (
 	"io/ioutil"
 	"net/http"
 )
 
-const SERVICE_UNAVAILABLE = 503
-const NOT_FOUND = 404
-const BAD_REQUEST = 400
-const INTERNAL_SERVER_ERROR = 500
-
 func Get(url string) ([]byte, int, error) {
 	response, errorOnGet := http.Get(url)
 
 	if errorOnGet != nil {
-		return nil, SERVICE_UNAVAILABLE, errorOnGet
+		return nil, http.StatusServiceUnavailable, errorOnGet
 	}
 
 	defer response.Body.Close()
@@ -22,7 +17,7 @@ func Get(url string) ([]byte, int, error) {
 	parsedBodyResponse, errorOnParsedBodyResponse := ioutil.ReadAll(response.Body)
 
 	if errorOnParsedBodyResponse != nil {
-		return nil, INTERNAL_SERVER_ERROR, errorOnParsedBodyResponse
+		return nil, http.StatusInternalServerError, errorOnParsedBodyResponse
 	}
 
 	return parsedBodyResponse, response.StatusCode, nil
