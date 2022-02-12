@@ -5,17 +5,17 @@ import (
 )
 
 type GetByPokemonName struct {
-	PokemonTypeRepository pokemonType.PokemonTypeRepository
+	Repository pokemonType.PokemonTypeRepository
 }
 
-func (getByPokemonName GetByPokemonName) Execute(name string) (pokemonType.PokemonTypes, error) {
+func (useCase GetByPokemonName) Execute(name string) (pokemonType.PokemonTypes, error) {
 	pokemonName, errorOnCreatePokemonName := pokemonType.CreatePokemonName(name)
 
 	if errorOnCreatePokemonName != nil {
 		return pokemonType.PokemonTypes{}, errorOnCreatePokemonName
 	}
 
-	types, errorOnFindingPokemon := getByPokemonName.PokemonTypeRepository.FindByPokemonName(*pokemonName)
+	types, errorOnFindingPokemon := useCase.Repository.FindByPokemonName(*pokemonName)
 
 	if errorOnFindingPokemon != nil {
 		return pokemonType.PokemonTypes{}, errorOnFindingPokemon
