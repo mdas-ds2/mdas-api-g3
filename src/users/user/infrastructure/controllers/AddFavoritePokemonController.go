@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 
@@ -30,7 +31,8 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 	body, err := ioutil.ReadAll(request.Body)
 
 	if err != nil {
-		panic(err)
+		webserver.RespondJsonError(response, errors.New("error reading request content"))
+		return
 	}
 
 	var requestBody infra.PokemonIdModel
@@ -38,7 +40,8 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 	err = json.Unmarshal(body, &requestBody)
 
 	if err != nil {
-		panic(err)
+		webserver.RespondJsonError(response, errors.New("bad formatted content"))
+		return
 	}
 
 	inMemoryRepo := infra.CreateFavoritePokemonMemoryRepository(&InMemomyFavoritePokemonDDBB)
@@ -48,7 +51,7 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 
 	error := addFavoritePokemonUseCase.Execute(userId, requestBody.PokemonId)
 	if error != nil {
-		webserver.RespondJsonError(response, error)
+		webserver.RespondJsonError(response, errors.New("Error inserting pokemon id on the favorite list: "+error.Error()))
 		return
 	}
 	respond(response, "pokemon added to favorite list correctly")
