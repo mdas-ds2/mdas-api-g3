@@ -1,6 +1,5 @@
 package user
 
-// TODO: User UUID instead of string for IDs
 type Id struct {
 	value string
 }
