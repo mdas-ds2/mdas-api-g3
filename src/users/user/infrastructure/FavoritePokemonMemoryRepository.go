@@ -14,11 +14,14 @@ func CreateFavoritePokemonMemoryRepository(database *map[string][]string) Favori
 
 func (repository FavoritePokemonMemoryRepository) Add(userId domain.UserId, favoritePokemonId domain.PokemonId) error {
 	id := userId.GetValue()
+
 	if !repository.canBeAdded(userId, favoritePokemonId) {
 		exception := domain.CreateFavoritePokemonDuplicatedException(favoritePokemonId)
 		return exception.GetError()
 	}
+
 	repository.database[id] = append(repository.database[id], favoritePokemonId.GetValue())
+
 	return nil
 }
 

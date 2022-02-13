@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"net/http"
 
@@ -21,8 +20,9 @@ var InMemomyFavoritePokemonDDBB = map[string][]string{}
 
 func (controller addFavoritePokemonController) Handler(response http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
-		methodNotSupportedException := webserver.CreateMethodNotSupportedException()
-		webserver.RespondJsonError(response, methodNotSupportedException.GetError())
+		response.WriteHeader(http.StatusMethodNotAllowed)
+		exception := webserver.CreateMethodNotSupportedException()
+		webserver.RespondJsonError(response, exception.GetError())
 		return
 	}
 
@@ -30,7 +30,9 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 	body, err := ioutil.ReadAll(request.Body)
 
 	if err != nil {
-		webserver.RespondJsonError(response, errors.New("error reading request content"))
+		exception := webserver.CreateInternalServerErrorException("error reading request content")
+		response.WriteHeader(http.StatusInternalServerError)
+		webserver.RespondJsonError(response, exception.GetError())
 		return
 	}
 
@@ -39,7 +41,9 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 	err = json.Unmarshal(body, &requestBody)
 
 	if err != nil {
-		webserver.RespondJsonError(response, errors.New("bad formatted content"))
+		exception := webserver.CreateBadRequestException("bad formatted content")
+		response.WriteHeader(http.StatusBadRequest)
+		webserver.RespondJsonError(response, exception.GetError())
 		return
 	}
 
@@ -51,7 +55,8 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 	error := addFavoritePokemonUseCase.Execute(userId, requestBody.PokemonId)
 
 	if error != nil {
-		webserver.RespondJsonError(response, errors.New("Error inserting pokemon id on the favorite list: "+error.Error()))
+		response.WriteHeader(http.StatusConflict)
+		webserver.RespondJsonError(response, error)
 		return
 	}
 
