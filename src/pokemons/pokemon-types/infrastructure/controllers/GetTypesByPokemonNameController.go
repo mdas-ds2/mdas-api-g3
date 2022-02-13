@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
-	"strings"
 
 	webserver "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/web-server"
 	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/application"
@@ -16,7 +16,7 @@ type getTypesByPokemonName struct {
 
 const (
 	POKEMON_URL_PATH_SEGMENT_POSITION = 2
-	POKEMON_TYPES_URL_PATTERN_SEGMENT = "/pokemon-types/"
+	POKEMON_TYPES_URL_PATTERN_SEGMENT = "/pokemon-types"
 )
 
 func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, request *http.Request) {
@@ -29,12 +29,14 @@ func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, re
 
 	pokemonName := getPokemonName(*request)
 
+	fmt.Println(pokemonName)
+
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
 	getByPokemonNameUseCase := application.GetByPokemonName{
 		Repository: pokeApiPokemonTypeRepository,
 	}
 
-	pokemonTypes, errorOnGetPokemonTypes := getByPokemonNameUseCase.Execute(string(pokemonName))
+	pokemonTypes, errorOnGetPokemonTypes := getByPokemonNameUseCase.Execute(pokemonName)
 
 	if errorOnGetPokemonTypes != nil {
 		response.WriteHeader(http.StatusNotFound)
@@ -62,7 +64,5 @@ func CreateGetTypesByPokemonName() getTypesByPokemonName {
 }
 
 func getPokemonName(request http.Request) string {
-	urlPathSegments := strings.Split(request.URL.Path, "/")
-	pokemonName := urlPathSegments[POKEMON_URL_PATH_SEGMENT_POSITION]
-	return pokemonName
+	return request.URL.Query()["name"][0]
 }
