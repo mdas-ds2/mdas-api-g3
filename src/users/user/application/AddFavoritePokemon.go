@@ -3,21 +3,21 @@ package user
 import (
 	"fmt"
 
-	userPkg "github.com/mdas-ds2/mdas-api-g3/src/users/user/domain"
+	domain "github.com/mdas-ds2/mdas-api-g3/src/users/user/domain"
 )
 
 type AddFavoritePokemon struct {
-	Repository userPkg.FavoritePokemonRepository
+	Repository domain.FavoritePokemonRepository
 }
 
 func (useCase AddFavoritePokemon) Execute(userId string, pokemonId string) error {
 	error := useCase.Repository.Add(
-		userPkg.CreateId(userId),
-		userPkg.CreatePokemonId(pokemonId),
+		domain.CreateId(userId),
+		domain.CreatePokemonId(pokemonId),
 	)
 	if error != nil {
 		return error
 	}
-	fmt.Println(useCase.Repository.FindAll(userPkg.CreateId(userId)))
+	fmt.Println(useCase.Repository.FindAll(domain.CreateId(userId)))
 	return nil
 }

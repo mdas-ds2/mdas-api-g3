@@ -1,14 +1,14 @@
 package user
 
 type User struct {
-	id Id
+	id UserId
 }
 
-func (user User) GetId() Id {
+func (user User) GetId() UserId {
 	return user.id
 }
 
-func CreateUser(id Id) (*User, error) {
+func CreateUser(id UserId) (*User, error) {
 	user := &User{
 		id: id,
 	}

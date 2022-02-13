@@ -1,6 +1,6 @@
 package user
 
 type FavoritePokemonRepository interface {
-	Add(userId Id, favoritePokemonId FavoritePokemonId) error
-	FindAll(userId Id) []FavoritePokemonId
+	Add(userId UserId, favoritePokemonId FavoritePokemonId) error
+	FindAll(userId UserId) []FavoritePokemonId
 }

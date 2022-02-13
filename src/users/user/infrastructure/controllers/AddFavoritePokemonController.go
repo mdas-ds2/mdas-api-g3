@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	webserver "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/web-server"
-	userUseCases "github.com/mdas-ds2/mdas-api-g3/src/users/user/application"
-	infra "github.com/mdas-ds2/mdas-api-g3/src/users/user/infrastructure"
+	application "github.com/mdas-ds2/mdas-api-g3/src/users/user/application"
+	infrastructure "github.com/mdas-ds2/mdas-api-g3/src/users/user/infrastructure"
 )
 
 type addFavoritePokemonController struct {
@@ -35,7 +35,7 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 		return
 	}
 
-	var requestBody infra.PokemonIdModel
+	var requestBody infrastructure.PokemonIdModel
 
 	err = json.Unmarshal(body, &requestBody)
 
@@ -44,8 +44,8 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 		return
 	}
 
-	inMemoryRepo := infra.CreateFavoritePokemonMemoryRepository(&InMemomyFavoritePokemonDDBB)
-	addFavoritePokemonUseCase := userUseCases.AddFavoritePokemon{
+	inMemoryRepo := infrastructure.CreateFavoritePokemonMemoryRepository(&InMemomyFavoritePokemonDDBB)
+	addFavoritePokemonUseCase := application.AddFavoritePokemon{
 		Repository: inMemoryRepo,
 	}
 

@@ -1,7 +1,7 @@
 package user
 
 import (
-	userDomain "github.com/mdas-ds2/mdas-api-g3/src/users/user/domain"
+	domain "github.com/mdas-ds2/mdas-api-g3/src/users/user/domain"
 )
 
 type FavoritePokemonMemoryRepository struct {
@@ -12,17 +12,17 @@ func CreateFavoritePokemonMemoryRepository(database *map[string][]string) Favori
 	return FavoritePokemonMemoryRepository{*database}
 }
 
-func (repository FavoritePokemonMemoryRepository) Add(userId userDomain.Id, favoritePokemonId userDomain.FavoritePokemonId) error {
+func (repository FavoritePokemonMemoryRepository) Add(userId domain.UserId, favoritePokemonId domain.FavoritePokemonId) error {
 	id := userId.GetValue()
 	if !repository.canBeAdded(userId, favoritePokemonId) {
-		exception := userDomain.CreateFavoritePokemonDuplicatedException(favoritePokemonId)
+		exception := domain.CreateFavoritePokemonDuplicatedException(favoritePokemonId)
 		return exception.GetError()
 	}
 	repository.database[id] = append(repository.database[id], favoritePokemonId.GetValue())
 	return nil
 }
 
-func (repository FavoritePokemonMemoryRepository) canBeAdded(userId userDomain.Id, favoritePokemonId userDomain.FavoritePokemonId) bool {
+func (repository FavoritePokemonMemoryRepository) canBeAdded(userId domain.UserId, favoritePokemonId domain.FavoritePokemonId) bool {
 	id := userId.GetValue()
 	favorites := repository.database[id]
 	if len(favorites) == 0 {
@@ -36,13 +36,13 @@ func (repository FavoritePokemonMemoryRepository) canBeAdded(userId userDomain.I
 	return true
 }
 
-func (repository FavoritePokemonMemoryRepository) FindAll(userId userDomain.Id) []userDomain.FavoritePokemonId {
+func (repository FavoritePokemonMemoryRepository) FindAll(userId domain.UserId) []domain.FavoritePokemonId {
 	id := userId.GetValue()
 	favorites := repository.database[id]
-	result := []userDomain.FavoritePokemonId{}
+	result := []domain.FavoritePokemonId{}
 
 	for _, favoriteId := range favorites {
-		pokemonId := userDomain.CreatePokemonId(favoriteId)
+		pokemonId := domain.CreatePokemonId(favoriteId)
 		result = append(result, pokemonId)
 	}
 
