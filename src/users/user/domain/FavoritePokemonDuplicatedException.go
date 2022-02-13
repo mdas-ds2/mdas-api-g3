@@ -9,7 +9,7 @@ type FavoritePokemonDuplicatedException struct {
 	err error
 }
 
-func CreateFavoritePokemonDuplicatedException(pokemonId FavoritePokemonId) FavoritePokemonDuplicatedException {
+func CreateFavoritePokemonDuplicatedException(pokemonId PokemonId) FavoritePokemonDuplicatedException {
 	message := fmt.Sprintf("Pokemon with id %s already in favorite list", pokemonId.GetValue())
 	exception := FavoritePokemonDuplicatedException{errors.New(message)}
 	return exception

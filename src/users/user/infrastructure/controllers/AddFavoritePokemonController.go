@@ -27,7 +27,6 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 	}
 
 	userId := request.Header.Get("UserId")
-
 	body, err := ioutil.ReadAll(request.Body)
 
 	if err != nil {
@@ -50,10 +49,12 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 	}
 
 	error := addFavoritePokemonUseCase.Execute(userId, requestBody.PokemonId)
+
 	if error != nil {
 		webserver.RespondJsonError(response, errors.New("Error inserting pokemon id on the favorite list: "+error.Error()))
 		return
 	}
+
 	respond(response, "pokemon added to favorite list correctly")
 }
 
@@ -67,7 +68,10 @@ func CreateAddFavoritePokemonController() addFavoritePokemonController {
 
 func respond(response http.ResponseWriter, message string) {
 	resultMap := make(map[string]string)
+
 	resultMap["response"] = message
+
 	result, _ := json.Marshal(resultMap)
+
 	response.Write(result)
 }

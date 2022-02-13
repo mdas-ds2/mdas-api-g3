@@ -12,7 +12,7 @@ func CreateFavoritePokemonMemoryRepository(database *map[string][]string) Favori
 	return FavoritePokemonMemoryRepository{*database}
 }
 
-func (repository FavoritePokemonMemoryRepository) Add(userId domain.UserId, favoritePokemonId domain.FavoritePokemonId) error {
+func (repository FavoritePokemonMemoryRepository) Add(userId domain.UserId, favoritePokemonId domain.PokemonId) error {
 	id := userId.GetValue()
 	if !repository.canBeAdded(userId, favoritePokemonId) {
 		exception := domain.CreateFavoritePokemonDuplicatedException(favoritePokemonId)
@@ -22,24 +22,27 @@ func (repository FavoritePokemonMemoryRepository) Add(userId domain.UserId, favo
 	return nil
 }
 
-func (repository FavoritePokemonMemoryRepository) canBeAdded(userId domain.UserId, favoritePokemonId domain.FavoritePokemonId) bool {
+func (repository FavoritePokemonMemoryRepository) canBeAdded(userId domain.UserId, favoritePokemonId domain.PokemonId) bool {
 	id := userId.GetValue()
 	favorites := repository.database[id]
+
 	if len(favorites) == 0 {
 		return true
 	}
+
 	for _, pokemonId := range favorites {
 		if pokemonId == favoritePokemonId.GetValue() {
 			return false
 		}
 	}
+
 	return true
 }
 
-func (repository FavoritePokemonMemoryRepository) FindAll(userId domain.UserId) []domain.FavoritePokemonId {
+func (repository FavoritePokemonMemoryRepository) FindAll(userId domain.UserId) []domain.PokemonId {
 	id := userId.GetValue()
 	favorites := repository.database[id]
-	result := []domain.FavoritePokemonId{}
+	result := []domain.PokemonId{}
 
 	for _, favoriteId := range favorites {
 		pokemonId := domain.CreatePokemonId(favoriteId)

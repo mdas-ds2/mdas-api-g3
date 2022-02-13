@@ -12,12 +12,16 @@ type AddFavoritePokemon struct {
 
 func (useCase AddFavoritePokemon) Execute(userId string, pokemonId string) error {
 	error := useCase.Repository.Add(
-		domain.CreateId(userId),
+		domain.CreateUserId(userId),
 		domain.CreatePokemonId(pokemonId),
 	)
+
 	if error != nil {
 		return error
 	}
-	fmt.Println(useCase.Repository.FindAll(domain.CreateId(userId)))
+
+	// TODO: Helper log; remove this for production
+	fmt.Println(useCase.Repository.FindAll(domain.CreateUserId(userId)))
+
 	return nil
 }
