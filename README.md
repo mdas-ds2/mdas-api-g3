@@ -20,7 +20,13 @@ _This project requires Go +1.13 and Go module support._
 docker build -t pokeapiwebserver .
 ```
 
-3. Run the application in a docker container.
+3. Test execution
+
+```
+go test ./...
+```
+
+4. Run the application in a docker container
 
 ```
 docker run -p 5001:5001 -it pokeapiwebserver /poke-api/main -getPokemonTypes [pokemonName]
