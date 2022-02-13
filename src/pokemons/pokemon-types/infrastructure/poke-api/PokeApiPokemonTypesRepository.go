@@ -1,31 +1,34 @@
 package pokeApi
 
 import (
-	http "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/http"
-	pokemonTypes "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
+	"net/http"
+
+	httpClient "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/http-client"
+	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
 )
 
 type PokeApiPokemonTypesRepository struct{}
 
 const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/"
 
-func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemonName(pokemonName pokemonTypes.PokemonName) (pokemonTypes.PokemonTypes, error) {
+func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemonName(pokemonName domain.PokemonName) (domain.PokemonTypes, error) {
 	urlPath := pokeApiUrl + pokemonName.GetValue()
-	response, statusCode, errorOnResponse := http.Get(urlPath)
 
-	if statusCode == http.SERVICE_UNAVAILABLE {
-		serviceUnavailableException := pokemonTypes.CreateRepositoryUnavailableException()
-		return pokemonTypes.PokemonTypes{}, serviceUnavailableException.GetError()
+	response, errorOnResponse := httpClient.Get(urlPath)
+
+	if response.StatusCode == http.StatusServiceUnavailable {
+		serviceUnavailableException := domain.CreateRepositoryUnavailableException()
+		return domain.PokemonTypes{}, serviceUnavailableException.GetError()
 	}
 
 	if errorOnResponse != nil {
-		return pokemonTypes.PokemonTypes{}, errorOnResponse
+		return domain.PokemonTypes{}, errorOnResponse
 	}
 
-	if statusCode == http.NOT_FOUND {
-		pokemonNotFoundException := pokemonTypes.CreatePokemonNotFoundException(pokemonName)
-		return pokemonTypes.PokemonTypes{}, pokemonNotFoundException.GetError()
+	if response.StatusCode == http.StatusNotFound {
+		pokemonNotFoundException := domain.CreatePokemonNotFoundException(pokemonName)
+		return domain.PokemonTypes{}, pokemonNotFoundException.GetError()
 	}
 
-	return mapResponseToPokemonTypes(pokemonName, response)
+	return mapResponseToPokemonTypes(pokemonName, response.Body)
 }

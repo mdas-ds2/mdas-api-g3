@@ -3,12 +3,12 @@ package transformers
 import (
 	"encoding/json"
 
-	pokemonType "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
+	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
 )
 
 type PokemonTypesToJson struct{}
 
-func (pokemonTypesToJson PokemonTypesToJson) Parse(types pokemonType.PokemonTypes) ([]byte, error) {
+func (pokemonTypesToJson PokemonTypesToJson) Parse(types domain.PokemonTypes) ([]byte, error) {
 	var res = []string{}
 
 	for _, value := range types.GetValues() {

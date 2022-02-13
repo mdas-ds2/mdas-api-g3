@@ -2,20 +2,20 @@ package pokemonType
 
 import "errors"
 
-type PokemonTypeName struct {
+type TypeName struct {
 	value string
 }
 
-func (name PokemonTypeName) GetValue() string {
+func (name TypeName) GetValue() string {
 	return name.value
 }
 
-func CreatePokemonTypeName(name string) (*PokemonTypeName, error) {
+func CreatePokemonTypeName(name string) (*TypeName, error) {
 	if len(name) == 0 {
 		return nil, errors.New("invalid argument \"type name\": it cannot be an empty string")
 	}
 
-	pokemonName := &PokemonTypeName{
+	pokemonName := &TypeName{
 		value: name,
 	}
 

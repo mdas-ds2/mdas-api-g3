@@ -3,29 +3,29 @@ package pokeApi
 import (
 	"encoding/json"
 
-	pokemonTypes "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
+	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
 )
 
 type PokeApiResponse = []byte
 
-func mapResponseToPokemonTypes(pokemonName pokemonTypes.PokemonName, pokeApiResponse PokeApiResponse) (pokemonTypes.PokemonTypes, error) {
+func mapResponseToPokemonTypes(pokemonName domain.PokemonName, pokeApiResponse PokeApiResponse) (domain.PokemonTypes, error) {
 	var pokemonResponse PokemonModel
 	json.Unmarshal(pokeApiResponse, &pokemonResponse)
 
-	var pTypes = pokemonTypes.PokemonTypes{}
+	var pTypes = domain.PokemonTypes{}
 	types := pTypes.Create()
 
 	for _, pokemonTypeResponse := range pokemonResponse.Types {
-		pokemonTypeName, errorOnCreatePokemonTypeName := pokemonTypes.CreatePokemonTypeName(pokemonTypeResponse.Type.Name)
+		pokemonTypeName, errorOnCreatePokemonTypeName := domain.CreatePokemonTypeName(pokemonTypeResponse.Type.Name)
 
 		if errorOnCreatePokemonTypeName != nil {
-			return pokemonTypes.PokemonTypes{}, errorOnCreatePokemonTypeName
+			return domain.PokemonTypes{}, errorOnCreatePokemonTypeName
 		}
 
-		pokemonType, errorOnCreatePokemonType := pokemonTypes.CreatePokemonType(*pokemonTypeName)
+		pokemonType, errorOnCreatePokemonType := domain.CreatePokemonType(*pokemonTypeName)
 
 		if errorOnCreatePokemonType != nil {
-			return pokemonTypes.PokemonTypes{}, errorOnCreatePokemonType
+			return domain.PokemonTypes{}, errorOnCreatePokemonType
 		}
 
 		types.Add(*pokemonType)

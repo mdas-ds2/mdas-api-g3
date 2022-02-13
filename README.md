@@ -28,4 +28,4 @@ docker run -p 5001:5001 -it pokeapiwebserver /poke-api/main -getPokemonTypes [po
 
 After application started, a webserver will be held on port 5001, so that you can get types via http request:
 
-example: http://localhost:5001/pokemon-types/pikachu
+example: curl http://localhost:5001/pokemon-types\?name\=charizard
