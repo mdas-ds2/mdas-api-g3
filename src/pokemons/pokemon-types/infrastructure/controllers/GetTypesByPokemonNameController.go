@@ -22,6 +22,7 @@ const (
 func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet {
 		methodNotSupportedException := webserver.CreateMethodNotSupportedException()
+		response.WriteHeader(http.StatusMethodNotAllowed)
 		webserver.RespondJsonError(response, methodNotSupportedException.GetError())
 		return
 	}
@@ -36,6 +37,7 @@ func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, re
 	pokemonTypes, errorOnGetPokemonTypes := getByPokemonNameUseCase.Execute(string(pokemonName))
 
 	if errorOnGetPokemonTypes != nil {
+		response.WriteHeader(http.StatusNotFound)
 		webserver.RespondJsonError(response, errorOnGetPokemonTypes)
 		return
 	}
@@ -43,6 +45,7 @@ func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, re
 	responseBody, errorOnCreatingResponse := (transformers.PokemonTypesToJson{}).Parse(pokemonTypes)
 
 	if errorOnCreatingResponse != nil {
+		response.WriteHeader(http.StatusInternalServerError)
 		webserver.RespondJsonError(response, errorOnCreatingResponse)
 		return
 	}
