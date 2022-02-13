@@ -5,20 +5,25 @@ import (
 	"net/http"
 )
 
-func Get(url string) ([]byte, int, error) {
-	response, errorOnGet := http.Get(url)
+type Response struct {
+	Body       []byte
+	StatusCode int
+}
 
-	if errorOnGet != nil {
-		return nil, http.StatusServiceUnavailable, errorOnGet
+func Get(url string) (Response, error) {
+	res, error := http.Get(url)
+
+	if error != nil {
+		return Response{nil, http.StatusServiceUnavailable}, error
 	}
 
-	defer response.Body.Close()
+	defer res.Body.Close()
 
-	parsedBodyResponse, errorOnParsedBodyResponse := ioutil.ReadAll(response.Body)
+	parsedBodyResponse, error := ioutil.ReadAll(res.Body)
 
-	if errorOnParsedBodyResponse != nil {
-		return nil, http.StatusInternalServerError, errorOnParsedBodyResponse
+	if error != nil {
+		return Response{nil, http.StatusInternalServerError}, error
 	}
 
-	return parsedBodyResponse, response.StatusCode, nil
+	return Response{parsedBodyResponse, res.StatusCode}, nil
 }

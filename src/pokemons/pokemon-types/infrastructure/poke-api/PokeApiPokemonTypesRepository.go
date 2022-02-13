@@ -13,9 +13,10 @@ const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/"
 
 func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemonName(pokemonName domain.PokemonName) (domain.PokemonTypes, error) {
 	urlPath := pokeApiUrl + pokemonName.GetValue()
-	response, statusCode, errorOnResponse := httpClient.Get(urlPath)
 
-	if statusCode == http.StatusServiceUnavailable {
+	response, errorOnResponse := httpClient.Get(urlPath)
+
+	if response.StatusCode == http.StatusServiceUnavailable {
 		serviceUnavailableException := domain.CreateRepositoryUnavailableException()
 		return domain.PokemonTypes{}, serviceUnavailableException.GetError()
 	}
@@ -24,10 +25,10 @@ func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemon
 		return domain.PokemonTypes{}, errorOnResponse
 	}
 
-	if statusCode == http.StatusNotFound {
+	if response.StatusCode == http.StatusNotFound {
 		pokemonNotFoundException := domain.CreatePokemonNotFoundException(pokemonName)
 		return domain.PokemonTypes{}, pokemonNotFoundException.GetError()
 	}
 
-	return mapResponseToPokemonTypes(pokemonName, response)
+	return mapResponseToPokemonTypes(pokemonName, response.Body)
 }
