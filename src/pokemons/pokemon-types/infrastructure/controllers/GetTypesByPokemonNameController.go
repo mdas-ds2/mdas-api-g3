@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	webserver "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/web-server"
-	pokemonTypeUseCases "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/application"
+	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/application"
 	pokeApi "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/infrastructure/poke-api"
 	transformers "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/infrastructure/transformers"
 )
@@ -29,7 +29,7 @@ func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, re
 	pokemonName := getPokemonName(*request)
 
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
-	getByPokemonNameUseCase := pokemonTypeUseCases.GetByPokemonName{
+	getByPokemonNameUseCase := application.GetByPokemonName{
 		Repository: pokeApiPokemonTypeRepository,
 	}
 

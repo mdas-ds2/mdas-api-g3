@@ -1,12 +1,12 @@
 package transformers
 
 import (
-	pokemonType "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
+	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
 )
 
 type PokemonTypesToString struct{}
 
-func (pokemonTypesToString PokemonTypesToString) Parse(types pokemonType.PokemonTypes) string {
+func (pokemonTypesToString PokemonTypesToString) Parse(types domain.PokemonTypes) string {
 	var result string
 	for index, pType := range types.GetValues() {
 		if index > 0 {

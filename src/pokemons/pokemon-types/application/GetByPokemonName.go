@@ -1,24 +1,24 @@
-package pokemonType
+package domain
 
 import (
-	pokemonType "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
+	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
 )
 
 type GetByPokemonName struct {
-	Repository pokemonType.PokemonTypeRepository
+	Repository domain.PokemonTypeRepository
 }
 
-func (useCase GetByPokemonName) Execute(name string) (pokemonType.PokemonTypes, error) {
-	pokemonName, errorOnCreatePokemonName := pokemonType.CreatePokemonName(name)
+func (useCase GetByPokemonName) Execute(name string) (domain.PokemonTypes, error) {
+	pokemonName, errorOnCreatePokemonName := domain.CreatePokemonName(name)
 
 	if errorOnCreatePokemonName != nil {
-		return pokemonType.PokemonTypes{}, errorOnCreatePokemonName
+		return domain.PokemonTypes{}, errorOnCreatePokemonName
 	}
 
 	types, errorOnFindingPokemon := useCase.Repository.FindByPokemonName(*pokemonName)
 
 	if errorOnFindingPokemon != nil {
-		return pokemonType.PokemonTypes{}, errorOnFindingPokemon
+		return domain.PokemonTypes{}, errorOnFindingPokemon
 	}
 
 	return types, nil

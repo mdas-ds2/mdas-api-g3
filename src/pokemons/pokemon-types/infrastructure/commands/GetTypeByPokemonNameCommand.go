@@ -4,7 +4,7 @@ import (
 	"log"
 
 	console "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/console"
-	pokemonTypeUseCases "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/application"
+	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/application"
 	pokeApi "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/infrastructure/poke-api"
 	transformers "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/infrastructure/transformers"
 )
@@ -15,7 +15,7 @@ func (command getTypesByPokemonName) Run() {
 	pokemonNameInput := console.NewInputParameter("getPokemonTypes", "Get pokemon types passing the pokemon name")
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
 
-	getByPokemonNameUseCase := pokemonTypeUseCases.GetByPokemonName{
+	getByPokemonNameUseCase := application.GetByPokemonName{
 		Repository: pokeApiPokemonTypeRepository,
 	}
 
