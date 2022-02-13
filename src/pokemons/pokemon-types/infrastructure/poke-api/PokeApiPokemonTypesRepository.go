@@ -30,5 +30,5 @@ func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemon
 		return domain.PokemonTypes{}, pokemonNotFoundException.GetError()
 	}
 
-	return mapResponseToPokemonTypes(pokemonName, response.Body)
+	return mapResponseToPokemonTypes(response.Body)
 }

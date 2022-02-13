@@ -8,7 +8,7 @@ import (
 
 type PokeApiResponse = []byte
 
-func mapResponseToPokemonTypes(pokemonName domain.PokemonName, pokeApiResponse PokeApiResponse) (domain.PokemonTypes, error) {
+func mapResponseToPokemonTypes(pokeApiResponse PokeApiResponse) (domain.PokemonTypes, error) {
 	var pokemonResponse PokemonModel
 	json.Unmarshal(pokeApiResponse, &pokemonResponse)
 
@@ -16,7 +16,7 @@ func mapResponseToPokemonTypes(pokemonName domain.PokemonName, pokeApiResponse P
 	types := pTypes.Create()
 
 	for _, pokemonTypeResponse := range pokemonResponse.Types {
-		pokemonTypeName, errorOnCreatePokemonTypeName := domain.CreatePokemonTypeName(pokemonTypeResponse.Type.Name)
+		pokemonTypeName, errorOnCreatePokemonTypeName := domain.CreateTypeName(pokemonTypeResponse.Type.Name)
 
 		if errorOnCreatePokemonTypeName != nil {
 			return domain.PokemonTypes{}, errorOnCreatePokemonTypeName
