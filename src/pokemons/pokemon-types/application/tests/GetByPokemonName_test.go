@@ -1,4 +1,4 @@
-package applicationTest
+package user_test
 
 import (
 	"errors"
@@ -31,76 +31,79 @@ func (pokeApiPokemonTypesRepository pokemonApiRepositoryMock) FindByPokemonName(
 }
 
 func TestGetTypesByPokemonName(test *testing.T) {
+	// Given
 	pokemonName := "pikachu"
-	pokeApiPokemonTypeRepository := pokemonApiRepositoryMock{}
+	repository := pokemonApiRepositoryMock{}
 
-	getByPokemonNameUseCase := application.GetByPokemonName{
-		Repository: pokeApiPokemonTypeRepository,
+	sut := application.GetByPokemonName{
+		Repository: repository,
 	}
 
-	pokemonTypes, error := getByPokemonNameUseCase.Execute(pokemonName)
+	// When
+	result, _ := sut.Execute(pokemonName)
+	pokemonType := result.GetValues()[0].GetName().GetValue()
 
-	if error != nil {
-		test.Errorf("Error is not expected on this unit test: %s", error.Error())
-	}
-
-	if pokemonTypes.GetValues()[0].GetName().GetValue() != "electric" {
+	// Then
+	if pokemonType != "electric" {
 		test.Errorf("Wrong type for pokemon named %s", pokemonName)
-
 	}
 }
 
-func TestGetTypesByPokemonWIthEmptyName(test *testing.T) {
+func TestGetTypesByPokemonWithEmptyName(test *testing.T) {
+	// Given
 	pokemonName := ""
-	pokeApiPokemonTypeRepository := pokemonApiRepositoryMock{}
+	repository := pokemonApiRepositoryMock{}
 
-	getByPokemonNameUseCase := application.GetByPokemonName{
-		Repository: pokeApiPokemonTypeRepository,
+	sut := application.GetByPokemonName{
+		Repository: repository,
 	}
 
-	_, error := getByPokemonNameUseCase.Execute(pokemonName)
+	// When
+	_, result := sut.Execute(pokemonName)
 
-	if error == nil {
+	// Then
+	if result == nil {
 		test.Errorf("An error should be returned when pokemon name is empty")
 	}
 }
 
-func TestGetTypesByPokemonWIthNonExistingName(test *testing.T) {
-	pokemonName := "pere"
-	pokeApiPokemonTypeRepository := pokemonApiRepositoryMock{}
+func TestGetTypesByPokemonWithNonExistingName(test *testing.T) {
+	// Given
+	inputPokemonName := "Pere"
+	pokemonName, _ := domain.CreatePokemonName(inputPokemonName)
+	exceptionError := domain.CreatePokemonNotFoundException(*pokemonName).GetError().Error()
+	repository := pokemonApiRepositoryMock{}
 
-	getByPokemonNameUseCase := application.GetByPokemonName{
-		Repository: pokeApiPokemonTypeRepository,
+	sut := application.GetByPokemonName{
+		Repository: repository,
 	}
 
-	_, error := getByPokemonNameUseCase.Execute(pokemonName)
+	// When
+	_, error := sut.Execute(inputPokemonName)
+	result := error.Error()
 
-	if error == nil {
-		test.Errorf("An error should be returned when pokemon name is empty")
-	}
-	pokeName, _ := domain.CreatePokemonName(pokemonName)
-	expectedException := domain.CreatePokemonNotFoundException(*pokeName)
-
-	if error.Error() != expectedException.GetError().Error() {
-		test.Errorf("The error expected is %s but the function returned %s.", error.Error(), expectedException.GetError().Error())
+	// Then
+	if result != exceptionError {
+		test.Errorf("The error expected is %s but the function returned %s.", exceptionError, result)
 	}
 }
 
 func TestGetTypesByPokemonWithUnavailableRepo(test *testing.T) {
+	// Given
 	pokemonName := "pikachu"
-	pokeApiPokemonTypeRepository := pokemonApiUnavailableMock{}
-	getByPokemonNameUseCase := application.GetByPokemonName{
-		Repository: pokeApiPokemonTypeRepository,
+	repository := pokemonApiUnavailableMock{}
+	exceptionError := domain.CreateRepositoryUnavailableException().GetError().Error()
+
+	sut := application.GetByPokemonName{
+		Repository: repository,
 	}
 
-	_, error := getByPokemonNameUseCase.Execute(pokemonName)
+	// When
+	_, error := sut.Execute(pokemonName)
+	result := error.Error()
 
-	if error == nil {
-		test.Errorf("An error should be returned when pokemon name is empty")
-	}
-	expectedException := domain.CreateRepositoryUnavailableException()
-
-	if error.Error() != expectedException.GetError().Error() {
-		test.Errorf("The error expected is %s but the function returned %s.", error.Error(), expectedException.GetError().Error())
+	// Then
+	if result != exceptionError {
+		test.Errorf("The error expected is %s but the function returned %s.", exceptionError, result)
 	}
 }
