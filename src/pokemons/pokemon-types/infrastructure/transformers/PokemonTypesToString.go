@@ -6,7 +6,7 @@ import (
 
 type PokemonTypesToString struct{}
 
-func (pokemonTypesToString PokemonTypesToString) Parse(types domain.PokemonTypes) string {
+func (pokemonTypesToString PokemonTypesToString) Parse(types domain.TypeCollection) string {
 	var result string
 	for index, pType := range types.GetValues() {
 		if index > 0 {

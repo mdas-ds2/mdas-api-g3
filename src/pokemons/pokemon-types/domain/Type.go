@@ -1,15 +1,15 @@
 package pokemonType
 
-type PokemonType struct {
+type Type struct {
 	name TypeName
 }
 
-func (pokemonType PokemonType) GetName() TypeName {
+func (pokemonType Type) GetName() TypeName {
 	return pokemonType.name
 }
 
-func CreatePokemonType(pokemonTypeName TypeName) (*PokemonType, error) {
-	pokemonType := &PokemonType{
+func CreateType(pokemonTypeName TypeName) (*Type, error) {
+	pokemonType := &Type{
 		name: pokemonTypeName,
 	}
 

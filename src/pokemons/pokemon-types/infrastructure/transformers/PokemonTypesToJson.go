@@ -8,7 +8,7 @@ import (
 
 type PokemonTypesToJson struct{}
 
-func (pokemonTypesToJson PokemonTypesToJson) Parse(types domain.PokemonTypes) ([]byte, error) {
+func (pokemonTypesToJson PokemonTypesToJson) Parse(types domain.TypeCollection) ([]byte, error) {
 	var res = []string{}
 
 	for _, value := range types.GetValues() {

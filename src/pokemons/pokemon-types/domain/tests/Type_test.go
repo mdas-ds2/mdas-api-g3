@@ -7,10 +7,16 @@ import (
 )
 
 func TestType(test *testing.T) {
+	// Given
 	typeName := "electric"
 	pokeTypeName, _ := domain.CreateTypeName(typeName)
-	pokeType, _ := domain.CreatePokemonType(*pokeTypeName)
-	if typeName != pokeType.GetName().GetValue() {
+
+	// When
+	pokeType, _ := domain.CreateType(*pokeTypeName)
+	result := pokeType.GetName().GetValue()
+
+	// Then
+	if result != typeName {
 		test.Errorf("Test incorrect, expected a pokemon type with value %s, received %s", pokeType.GetName().GetValue(), pokeTypeName)
 	}
 }

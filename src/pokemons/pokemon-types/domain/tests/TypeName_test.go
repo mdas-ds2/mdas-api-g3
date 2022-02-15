@@ -7,16 +7,27 @@ import (
 )
 
 func TestTypeName(test *testing.T) {
+	// Given
 	typeName := "electric"
+
+	// When
 	pokeTypeName, _ := domain.CreateTypeName(typeName)
-	if typeName != pokeTypeName.GetValue() {
-		test.Errorf("Test incorrect, expected a pokemon type with value %s, received %s", pokeTypeName.GetValue(), pokeTypeName)
+	result := pokeTypeName.GetValue()
+
+	// Then
+	if result != typeName {
+		test.Errorf("Test incorrect, expected a pokemon type with value %s, received %s", result, pokeTypeName)
 	}
 }
 
 func TestTypeNameWithEmptyValue(test *testing.T) {
+	// Given
 	typeName := ""
+
+	// When
 	_, error := domain.CreateTypeName(typeName)
+
+	// Then
 	if error == nil {
 		test.Errorf("the test should return an error when creating a type name empty")
 	}

@@ -10,22 +10,22 @@ import (
 
 type pokemonApiUnavailableMock struct{}
 
-func (pokeApiPokemonTypesRepository pokemonApiUnavailableMock) FindByPokemonName(pokemonName domain.PokemonName) (domain.PokemonTypes, error) {
-	return domain.PokemonTypes{}, domain.CreateRepositoryUnavailableException().GetError()
+func (pokeApiPokemonTypesRepository pokemonApiUnavailableMock) FindByPokemonName(pokemonName domain.PokemonName) (domain.TypeCollection, error) {
+	return domain.TypeCollection{}, domain.CreateRepositoryUnavailableException().GetError()
 }
 
 type pokemonApiRepositoryMock struct{}
 
-func (pokeApiPokemonTypesRepository pokemonApiRepositoryMock) FindByPokemonName(pokemonName domain.PokemonName) (domain.PokemonTypes, error) {
+func (pokeApiPokemonTypesRepository pokemonApiRepositoryMock) FindByPokemonName(pokemonName domain.PokemonName) (domain.TypeCollection, error) {
 	if pokemonName.GetValue() == "" {
-		return domain.PokemonTypes{}, errors.New("invalid argument \"type name\": it cannot be an empty string")
+		return domain.TypeCollection{}, errors.New("invalid argument \"type name\": it cannot be an empty string")
 	}
 	if pokemonName.GetValue() != "pikachu" {
-		return domain.PokemonTypes{}, domain.CreatePokemonNotFoundException(pokemonName).GetError()
+		return domain.TypeCollection{}, domain.CreatePokemonNotFoundException(pokemonName).GetError()
 	}
 	typeName, _ := domain.CreateTypeName("electric")
-	pokeType, _ := domain.CreatePokemonType(*typeName)
-	pokemonTypes := (domain.PokemonTypes{}).Create()
+	pokeType, _ := domain.CreateType(*typeName)
+	pokemonTypes := (domain.TypeCollection{}).Create()
 	pokemonTypes.Add(*pokeType)
 	return pokemonTypes, nil
 }
@@ -59,10 +59,10 @@ func TestGetTypesByPokemonWithEmptyName(test *testing.T) {
 	}
 
 	// When
-	_, result := sut.Execute(pokemonName)
+	_, error := sut.Execute(pokemonName)
 
 	// Then
-	if result == nil {
+	if error == nil {
 		test.Errorf("An error should be returned when pokemon name is empty")
 	}
 }

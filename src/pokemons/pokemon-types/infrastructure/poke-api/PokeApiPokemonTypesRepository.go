@@ -11,23 +11,23 @@ type PokeApiPokemonTypesRepository struct{}
 
 const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/"
 
-func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemonName(pokemonName domain.PokemonName) (domain.PokemonTypes, error) {
+func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemonName(pokemonName domain.PokemonName) (domain.TypeCollection, error) {
 	urlPath := pokeApiUrl + pokemonName.GetValue()
 
 	response, errorOnResponse := httpClient.Get(urlPath)
 
 	if response.StatusCode == http.StatusServiceUnavailable {
 		serviceUnavailableException := domain.CreateRepositoryUnavailableException()
-		return domain.PokemonTypes{}, serviceUnavailableException.GetError()
+		return domain.TypeCollection{}, serviceUnavailableException.GetError()
 	}
 
 	if errorOnResponse != nil {
-		return domain.PokemonTypes{}, errorOnResponse
+		return domain.TypeCollection{}, errorOnResponse
 	}
 
 	if response.StatusCode == http.StatusNotFound {
 		pokemonNotFoundException := domain.CreatePokemonNotFoundException(pokemonName)
-		return domain.PokemonTypes{}, pokemonNotFoundException.GetError()
+		return domain.TypeCollection{}, pokemonNotFoundException.GetError()
 	}
 
 	return mapResponseToPokemonTypes(response.Body)

@@ -1,19 +1,19 @@
 package pokemonType
 
-type PokemonTypes struct {
-	values []PokemonType
+type TypeCollection struct {
+	values []Type
 }
 
-func (pokemonTypes PokemonTypes) Create() PokemonTypes {
-	types := []PokemonType{}
-	pokeTypes := PokemonTypes{types}
+func (pokemonTypes TypeCollection) Create() TypeCollection {
+	types := []Type{}
+	pokeTypes := TypeCollection{types}
 	return pokeTypes
 }
 
-func (pokemonTypes PokemonTypes) GetValues() []PokemonType {
+func (pokemonTypes TypeCollection) GetValues() []Type {
 	return pokemonTypes.values
 }
 
-func (pokemonTypes *PokemonTypes) Add(pokemonType PokemonType) {
+func (pokemonTypes *TypeCollection) Add(pokemonType Type) {
 	pokemonTypes.values = append(pokemonTypes.values, pokemonType)
 }
