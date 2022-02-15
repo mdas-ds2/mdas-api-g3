@@ -27,26 +27,38 @@ func (repository FavoritePokemonRepositoryMock) FindAll(userId domain.UserId) []
 }
 
 func TestAddFavoritePokemon(test *testing.T) {
-	repo := FavoritePokemonRepositoryMock{}
-	useCase := application.AddFavoritePokemon{Repository: repo}
+	// Given
+	userId := "peze12038"
+	pokemonId := "chrzd918239"
+	repository := FavoritePokemonRepositoryMock{}
 
-	err := useCase.Execute(USER_ID, POKEMON_ID)
-	if err != nil {
-		test.Errorf("Error is not expected on this unit test: %s", err.Error())
+	sut := application.AddFavoritePokemon{Repository: repository}
+
+	// When
+	error := sut.Execute(userId, pokemonId)
+
+	// Then
+	if error != nil {
+		test.Errorf("Error is not expected on this unit test: %s", error.Error())
 	}
 
 }
 
 func TestAddFavoritePokemonDuplicated(test *testing.T) {
-	repo := FavoritePokemonRepositoryMock{}
-	useCase := application.AddFavoritePokemon{Repository: repo}
+	// Given
+	userId := "peze12038"
+	duplicatedPokemonId := "pkchu9102"
+	expectedError := domain.CreateFavoritePokemonDuplicatedException(domain.CreatePokemonId(REPEATED_POKEMON_ID)).GetError().Error()
+	repository := FavoritePokemonRepositoryMock{}
 
-	err := useCase.Execute(USER_ID, REPEATED_POKEMON_ID)
-	if err == nil {
-		test.Errorf("Error is expected on this unit test")
-	}
-	expectedError := domain.CreateFavoritePokemonDuplicatedException(domain.CreatePokemonId(REPEATED_POKEMON_ID))
-	if err.Error() != expectedError.GetError().Error() {
-		test.Errorf("Error expected is %s but has been received %s", expectedError.GetError().Error(), err.Error())
+	sut := application.AddFavoritePokemon{Repository: repository}
+
+	// When
+	error := sut.Execute(userId, duplicatedPokemonId)
+	result := error.Error()
+
+	// Then
+	if result != expectedError {
+		test.Errorf("Error expected is %s but has been received %s", expectedError, result)
 	}
 }
