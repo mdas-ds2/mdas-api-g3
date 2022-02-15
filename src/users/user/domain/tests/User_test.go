@@ -7,13 +7,16 @@ import (
 )
 
 func TestGetId(t *testing.T) {
+	// Given
 	id := "1234"
 	userId := domain.CreateUserId(id)
 	user := domain.CreateUser(userId)
 
-	got := user.GetId().GetValue()
+	// When
+	result := user.GetId().GetValue()
 
-	if got != id {
-		t.Errorf("Did not get expected result. Wanted user ID %q, got: %q", id, got)
+	// Then
+	if result != id {
+		t.Errorf("Did not get expected result. Wanted user ID %q, got: %q", id, result)
 	}
 }

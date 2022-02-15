@@ -10,9 +10,9 @@ func TestType(test *testing.T) {
 	// Given
 	typeName := "electric"
 	pokeTypeName, _ := domain.CreateTypeName(typeName)
+	pokeType, _ := domain.CreateType(*pokeTypeName)
 
 	// When
-	pokeType, _ := domain.CreateType(*pokeTypeName)
 	result := pokeType.GetName().GetValue()
 
 	// Then

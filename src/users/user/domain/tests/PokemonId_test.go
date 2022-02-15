@@ -7,9 +7,15 @@ import (
 )
 
 func TestPokemonId(t *testing.T) {
-	originalId := "1234"
-	pokemonId := domain.CreatePokemonId(originalId)
-	if pokemonId.GetValue() != originalId {
-		t.Errorf("Did not get expected result. Wanted user ID %q, got: %q", originalId, pokemonId.GetValue())
+	// Given
+	id := "1234"
+	pokemonId := domain.CreatePokemonId(id)
+
+	// When
+	result := pokemonId.GetValue()
+
+	// Then
+	if result != id {
+		t.Errorf("Did not get expected result. Wanted user ID %q, got: %q", id, result)
 	}
 }
