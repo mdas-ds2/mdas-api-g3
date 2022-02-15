@@ -10,7 +10,7 @@ func (name TypeName) GetValue() string {
 	return name.value
 }
 
-func CreatePokemonTypeName(name string) (*TypeName, error) {
+func CreateTypeName(name string) (*TypeName, error) {
 	if len(name) == 0 {
 		return nil, errors.New("invalid argument \"type name\": it cannot be an empty string")
 	}

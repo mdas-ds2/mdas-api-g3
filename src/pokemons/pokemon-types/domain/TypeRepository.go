@@ -1,5 +1,5 @@
 package pokemonType
 
 type PokemonTypeRepository interface {
-	FindByPokemonName(pokemonName PokemonName) (PokemonTypes, error)
+	FindByPokemonName(pokemonName PokemonName) (TypeCollection, error)
 }
