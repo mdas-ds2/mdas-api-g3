@@ -1,6 +1,6 @@
 package user
 
 type FavoritePokemonRepository interface {
-	Add(user User, favoritePokemonId PokemonId) error
-	FindAll(userId UserId) []PokemonId
+	Save(user User) error
+	GetFavorites(userId UserId) FavoritePokemonIdCollection
 }
