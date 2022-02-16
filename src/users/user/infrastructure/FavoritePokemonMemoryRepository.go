@@ -12,19 +12,22 @@ func CreateFavoritePokemonMemoryRepository(database *map[string][]string) Favori
 	return FavoritePokemonMemoryRepository{*database}
 }
 
-func (repository *FavoritePokemonMemoryRepository) Save(user domain.User) error {
+func (repository FavoritePokemonMemoryRepository) Save(user domain.User) error {
 	userId := user.GetId().GetValue()
 	favoriteCollection := user.GetFavorites().GetValues()
+
 	var favoriteIdList []string
+
 	for _, collectionItem := range favoriteCollection {
 		favoriteIdList = append(favoriteIdList, collectionItem.GetValue())
 	}
+
 	repository.database[userId] = favoriteIdList
 
 	return nil
 }
 
-func (repository FavoritePokemonMemoryRepository) FindUser(userId domain.UserId) *domain.User {
+func (repository FavoritePokemonMemoryRepository) Find(userId domain.UserId) (domain.User, error) {
 	id := userId.GetValue()
 	favorites := repository.database[id]
 	result := []domain.PokemonId{}
@@ -33,7 +36,9 @@ func (repository FavoritePokemonMemoryRepository) FindUser(userId domain.UserId)
 		pokemonId := domain.CreatePokemonId(favoriteId)
 		result = append(result, pokemonId)
 	}
-	favoriteCollection := domain.CreateFavoritePokemonIdCollection(result)
+
+	favoriteCollection := domain.CreatePokemonIdCollection(result)
 	user := domain.CreateUser(userId, favoriteCollection)
-	return user
+
+	return *user, nil
 }

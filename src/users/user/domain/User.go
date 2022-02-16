@@ -2,14 +2,14 @@ package user
 
 type User struct {
 	id               UserId
-	favoritePokemons FavoritePokemonIdCollection
+	favoritePokemons PokemonIdCollection
 }
 
 func (user User) GetId() UserId {
 	return user.id
 }
 
-func CreateUser(id UserId, favoritePokemons FavoritePokemonIdCollection) *User {
+func CreateUser(id UserId, favoritePokemons PokemonIdCollection) *User {
 	user := &User{
 		id:               id,
 		favoritePokemons: favoritePokemons,
@@ -27,6 +27,6 @@ func (user *User) AddFavorite(pokemonId PokemonId) error {
 	return nil
 }
 
-func (user *User) GetFavorites() FavoritePokemonIdCollection {
+func (user *User) GetFavorites() PokemonIdCollection {
 	return user.favoritePokemons
 }
