@@ -48,6 +48,7 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 	}
 
 	inMemoryRepo := infrastructure.CreateFavoritePokemonMemoryRepository(&InMemomyFavoritePokemonDDBB)
+
 	addFavoritePokemonUseCase := application.AddFavoritePokemon{
 		Repository: inMemoryRepo,
 	}

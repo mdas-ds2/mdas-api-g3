@@ -5,20 +5,23 @@ import (
 )
 
 type AddFavoritePokemon struct {
-	Repository domain.FavoritePokemonRepository
+	Repository domain.UserRepository
 }
 
-func (useCase AddFavoritePokemon) Execute(userId string, pokemonId string) error {
-	user := domain.CreateUser(domain.CreateUserId(userId))
+func (useCase AddFavoritePokemon) Execute(userId, pokemonId string) error {
+	user := useCase.Repository.Find(
+		domain.CreateUserId(userId),
+	)
 
-	error := useCase.Repository.Add(
-		*user,
+	err := user.AddFavorite(
 		domain.CreatePokemonId(pokemonId),
 	)
 
-	if error != nil {
-		return error
+	if err != nil {
+		return err
 	}
+
+	useCase.Repository.Save(user)
 
 	return nil
 }

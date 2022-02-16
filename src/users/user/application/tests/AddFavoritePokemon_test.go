@@ -13,17 +13,18 @@ const USER_ID = "peze12038"
 
 type FavoritePokemonRepositoryMock struct{}
 
-func (repository FavoritePokemonRepositoryMock) Add(user domain.User, favoritePokemonId domain.PokemonId) error {
+func (repository FavoritePokemonRepositoryMock) Save(user domain.User) error {
+	favoritePokemonId := user.GetFavorites().GetValues()[0]
 	if favoritePokemonId.GetValue() == REPEATED_POKEMON_ID {
 		return domain.CreateFavoritePokemonDuplicatedException(favoritePokemonId).GetError()
 	}
 	return nil
 }
 
-func (repository FavoritePokemonRepositoryMock) FindAll(userId domain.UserId) []domain.PokemonId {
-	pokemonId := domain.CreatePokemonId(REPEATED_POKEMON_ID)
-	pokemonId2 := domain.CreatePokemonId(POKEMON_ID)
-	return []domain.PokemonId{pokemonId, pokemonId2}
+func (repository FavoritePokemonRepositoryMock) Find(userId domain.UserId) domain.User {
+	pokemonId := domain.CreatePokemonId("pkchu9102")
+	user := domain.CreateUser(domain.CreateUserId(userId.GetValue()), domain.CreatePokemonIdCollection([]domain.PokemonId{pokemonId}))
+	return *user
 }
 
 func TestAddFavoritePokemon(test *testing.T) {
@@ -41,7 +42,6 @@ func TestAddFavoritePokemon(test *testing.T) {
 	if error != nil {
 		test.Errorf("Error is not expected on this unit test: %s", error.Error())
 	}
-
 }
 
 func TestAddFavoritePokemonDuplicated(test *testing.T) {
