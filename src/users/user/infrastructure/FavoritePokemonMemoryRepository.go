@@ -27,7 +27,7 @@ func (repository FavoritePokemonMemoryRepository) Save(user domain.User) error {
 	return nil
 }
 
-func (repository FavoritePokemonMemoryRepository) Find(userId domain.UserId) (domain.User, error) {
+func (repository FavoritePokemonMemoryRepository) Find(userId domain.UserId) domain.User {
 	id := userId.GetValue()
 	favorites := repository.database[id]
 	result := []domain.PokemonId{}
@@ -40,5 +40,5 @@ func (repository FavoritePokemonMemoryRepository) Find(userId domain.UserId) (do
 	favoriteCollection := domain.CreatePokemonIdCollection(result)
 	user := domain.CreateUser(userId, favoriteCollection)
 
-	return *user, nil
+	return *user
 }

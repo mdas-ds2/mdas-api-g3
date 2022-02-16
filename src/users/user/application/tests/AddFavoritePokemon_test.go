@@ -21,15 +21,12 @@ func (repository FavoritePokemonRepositoryMock) Save(user domain.User) error {
 	return nil
 }
 
-func (repository FavoritePokemonRepositoryMock) GetFavorites(userId domain.UserId) domain.FavoritePokemonIdCollection {
-	pokemonId := domain.CreatePokemonId(REPEATED_POKEMON_ID)
-	pokemonId2 := domain.CreatePokemonId(POKEMON_ID)
-	return domain.CreateFavoritePokemonIdCollection([]domain.PokemonId{pokemonId, pokemonId2})
+func (repository FavoritePokemonRepositoryMock) Find(userId domain.UserId) domain.User {
+	pokemonId := domain.CreatePokemonId("pkchu9102")
+	user := domain.CreateUser(domain.CreateUserId(userId.GetValue()), domain.CreatePokemonIdCollection([]domain.PokemonId{pokemonId}))
+	return *user
 }
-func (repository FavoritePokemonRepositoryMock) FindUser(userId domain.UserId) *domain.User {
-	user := domain.CreateUser(domain.CreateUserId(userId.GetValue()), domain.FavoritePokemonIdCollection{})
-	return user
-}
+
 func TestAddFavoritePokemon(test *testing.T) {
 	// Given
 	userId := "peze12038"
@@ -45,7 +42,6 @@ func TestAddFavoritePokemon(test *testing.T) {
 	if error != nil {
 		test.Errorf("Error is not expected on this unit test: %s", error.Error())
 	}
-
 }
 
 func TestAddFavoritePokemonDuplicated(test *testing.T) {

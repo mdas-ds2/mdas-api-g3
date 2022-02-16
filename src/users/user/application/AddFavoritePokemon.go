@@ -9,23 +9,19 @@ type AddFavoritePokemon struct {
 }
 
 func (useCase AddFavoritePokemon) Execute(userId, pokemonId string) error {
-	user, err := useCase.Repository.Find(
+	user := useCase.Repository.Find(
 		domain.CreateUserId(userId),
 	)
 
-	if err != nil {
-		return err
-	}
-
-	user.AddFavorite(
+	err := user.AddFavorite(
 		domain.CreatePokemonId(pokemonId),
 	)
 
-	useCase.Repository.Save(user)
-
 	if err != nil {
 		return err
 	}
+
+	useCase.Repository.Save(user)
 
 	return nil
 }
