@@ -23,7 +23,9 @@ func (user *User) AddFavorite(pokemonId PokemonId) error {
 		exception := CreateFavoritePokemonDuplicatedException(pokemonId)
 		return exception.GetError()
 	}
+
 	user.favoritePokemons.Add(pokemonId)
+
 	return nil
 }
 

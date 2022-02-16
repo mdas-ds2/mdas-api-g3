@@ -12,16 +12,16 @@ func (collection *PokemonIdCollection) Has(id PokemonId) bool {
 	elements := collection.elements
 
 	if len(elements) == 0 {
-		return true
+		return false
 	}
 
 	for _, pokemonId := range elements {
 		if pokemonId.GetValue() == id.GetValue() {
-			return false
+			return true
 		}
 	}
 
-	return true
+	return false
 }
 
 func CreatePokemonIdCollection(favoritePokemonList []PokemonId) PokemonIdCollection {
