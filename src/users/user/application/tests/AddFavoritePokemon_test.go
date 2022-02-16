@@ -13,19 +13,23 @@ const USER_ID = "peze12038"
 
 type FavoritePokemonRepositoryMock struct{}
 
-func (repository FavoritePokemonRepositoryMock) Add(user domain.User, favoritePokemonId domain.PokemonId) error {
+func (repository FavoritePokemonRepositoryMock) Save(user domain.User) error {
+	favoritePokemonId := user.GetFavorites().GetValues()[0]
 	if favoritePokemonId.GetValue() == REPEATED_POKEMON_ID {
 		return domain.CreateFavoritePokemonDuplicatedException(favoritePokemonId).GetError()
 	}
 	return nil
 }
 
-func (repository FavoritePokemonRepositoryMock) FindAll(userId domain.UserId) []domain.PokemonId {
+func (repository FavoritePokemonRepositoryMock) GetFavorites(userId domain.UserId) domain.FavoritePokemonIdCollection {
 	pokemonId := domain.CreatePokemonId(REPEATED_POKEMON_ID)
 	pokemonId2 := domain.CreatePokemonId(POKEMON_ID)
-	return []domain.PokemonId{pokemonId, pokemonId2}
+	return domain.CreateFavoritePokemonIdCollection([]domain.PokemonId{pokemonId, pokemonId2})
 }
-
+func (repository FavoritePokemonRepositoryMock) FindUser(userId domain.UserId) *domain.User {
+	user := domain.CreateUser(domain.CreateUserId(userId.GetValue()), domain.FavoritePokemonIdCollection{})
+	return user
+}
 func TestAddFavoritePokemon(test *testing.T) {
 	// Given
 	userId := "peze12038"
