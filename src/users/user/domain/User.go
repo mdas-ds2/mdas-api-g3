@@ -26,3 +26,7 @@ func (user *User) AddFavorite(pokemonId PokemonId) error {
 	user.favoritePokemons.Add(pokemonId)
 	return nil
 }
+
+func (user *User) GetFavorites() FavoritePokemonIdCollection {
+	return user.favoritePokemons
+}

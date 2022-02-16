@@ -23,3 +23,11 @@ func (collection *FavoritePokemonIdCollection) Has(favoritePokemonToAdd PokemonI
 
 	return true
 }
+
+func CreateFavoritePokemonIdCollection(favoritePokemonList []PokemonId) FavoritePokemonIdCollection {
+	return FavoritePokemonIdCollection{favoritePokemonList}
+}
+
+func (collection FavoritePokemonIdCollection) GetValues() []PokemonId {
+	return collection.values
+}
