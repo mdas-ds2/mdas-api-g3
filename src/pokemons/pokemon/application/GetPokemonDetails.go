@@ -7,12 +7,12 @@ import (
 )
 
 type GetPokemonDetails struct {
-	repository domain.Repository
+	Repository domain.Repository
 }
 
 func (getPokemonDetails *GetPokemonDetails) Execute(pokemonId int) (PokemonDetails, error) {
 	id := domain.CreateId(pokemonId)
-	pokemon, error := getPokemonDetails.repository.Find(id)
+	pokemon, error := getPokemonDetails.Repository.Find(id)
 	//has to return a domain exception
 	if error != nil {
 		return PokemonDetails{}, error
