@@ -18,7 +18,7 @@ func (repository PokeApiPokemonRepository) Find(id domain.Id) (domain.Pokemon, e
 	response, errorOnResponse := httpClient.Get(urlPath)
 
 	if response.StatusCode == http.StatusServiceUnavailable {
-		serviceUnavailableException := domain.CreateRepositoryUnavailableException()
+		serviceUnavailableException := domain.CreatePokemonRepositoryUnavailableException()
 		return domain.Pokemon{}, serviceUnavailableException.GetError()
 	}
 

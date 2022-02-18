@@ -1,8 +1,6 @@
 package pokemon
 
 import (
-	"fmt"
-
 	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/domain"
 )
 
@@ -24,6 +22,6 @@ func (getPokemonDetails *GetPokemonDetails) Execute(pokemonId int) (PokemonDetai
 		pokemon.GetHeight().GetValue(),
 		pokemon.GetWeight().GetValue(),
 	}
-	fmt.Printf(pokemonDetail.Name, error)
+
 	return pokemonDetail, nil
 }
