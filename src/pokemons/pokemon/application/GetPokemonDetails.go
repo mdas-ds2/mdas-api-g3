@@ -11,7 +11,7 @@ type GetPokemonDetails struct {
 func (getPokemonDetails *GetPokemonDetails) Execute(pokemonId int) (PokemonDetails, error) {
 	id := domain.CreateId(pokemonId)
 	pokemon, error := getPokemonDetails.Repository.Find(id)
-	//has to return a domain exception
+
 	if error != nil {
 		return PokemonDetails{}, error
 	}

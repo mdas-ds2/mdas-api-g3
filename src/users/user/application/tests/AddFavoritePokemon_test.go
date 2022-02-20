@@ -11,9 +11,9 @@ const REPEATED_POKEMON_ID = "pkchu9102"
 const POKEMON_ID = "chrzd918239"
 const USER_ID = "peze12038"
 
-type FavoritePokemonRepositoryMock struct{}
+type UserRepositoryMock struct{}
 
-func (repository FavoritePokemonRepositoryMock) Save(user domain.User) error {
+func (repository UserRepositoryMock) Save(user domain.User) error {
 	favoritePokemonId := user.GetFavorites().GetValues()[0]
 	if favoritePokemonId.GetValue() == REPEATED_POKEMON_ID {
 		return domain.CreateFavoritePokemonDuplicatedException(favoritePokemonId).GetError()
@@ -21,7 +21,7 @@ func (repository FavoritePokemonRepositoryMock) Save(user domain.User) error {
 	return nil
 }
 
-func (repository FavoritePokemonRepositoryMock) Find(userId domain.UserId) domain.User {
+func (repository UserRepositoryMock) Find(userId domain.UserId) domain.User {
 	pokemonId := domain.CreatePokemonId("pkchu9102")
 	user := domain.CreateUser(domain.CreateUserId(userId.GetValue()), domain.CreatePokemonIdCollection([]domain.PokemonId{pokemonId}))
 	return *user
@@ -31,7 +31,7 @@ func TestAddFavoritePokemon(test *testing.T) {
 	// Given
 	userId := "peze12038"
 	pokemonId := "chrzd918239"
-	repository := FavoritePokemonRepositoryMock{}
+	repository := UserRepositoryMock{}
 
 	sut := application.AddFavoritePokemon{Repository: repository}
 
@@ -49,7 +49,7 @@ func TestAddFavoritePokemonDuplicated(test *testing.T) {
 	userId := "peze12038"
 	duplicatedPokemonId := "pkchu9102"
 	expectedError := domain.CreateFavoritePokemonDuplicatedException(domain.CreatePokemonId(REPEATED_POKEMON_ID)).GetError().Error()
-	repository := FavoritePokemonRepositoryMock{}
+	repository := UserRepositoryMock{}
 
 	sut := application.AddFavoritePokemon{Repository: repository}
 
