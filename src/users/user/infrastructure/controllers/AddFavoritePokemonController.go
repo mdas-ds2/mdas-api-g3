@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -19,6 +20,7 @@ const FAVORITE_POKEMON_URL_PATTERN_SEGMENT = "/favorite-pokemon/"
 var InMemomyFavoritePokemonDDBB = map[string][]string{}
 
 func (controller addFavoritePokemonController) Handler(response http.ResponseWriter, request *http.Request) {
+	fmt.Println("request received")
 	if request.Method != http.MethodPost {
 		response.WriteHeader(http.StatusMethodNotAllowed)
 		exception := webserver.CreateMethodNotSupportedException()
@@ -28,7 +30,7 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 
 	userId := request.Header.Get("UserId")
 	body, err := ioutil.ReadAll(request.Body)
-
+	fmt.Println("This is the userId ---> ", userId)
 	if err != nil {
 		exception := webserver.CreateInternalServerErrorException("error reading request content")
 		response.WriteHeader(http.StatusInternalServerError)
@@ -46,7 +48,7 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 		webserver.RespondJsonError(response, exception.GetError())
 		return
 	}
-
+	fmt.Println("This is the pokemonId ---> ", requestBody.PokemonId)
 	inMemoryRepo := infrastructure.CreateFavoritePokemonMemoryRepository(&InMemomyFavoritePokemonDDBB)
 
 	addFavoritePokemonUseCase := application.AddFavoritePokemon{
