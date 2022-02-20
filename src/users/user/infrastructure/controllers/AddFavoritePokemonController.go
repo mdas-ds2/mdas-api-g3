@@ -20,7 +20,6 @@ const FAVORITE_POKEMON_URL_PATTERN_SEGMENT = "/favorite-pokemon/"
 var InMemomyFavoritePokemonDDBB = map[string][]string{}
 
 func (controller addFavoritePokemonController) Handler(response http.ResponseWriter, request *http.Request) {
-	fmt.Println("request received")
 	if request.Method != http.MethodPost {
 		response.WriteHeader(http.StatusMethodNotAllowed)
 		exception := webserver.CreateMethodNotSupportedException()

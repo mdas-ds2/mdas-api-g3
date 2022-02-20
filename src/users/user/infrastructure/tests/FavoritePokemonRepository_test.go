@@ -20,13 +20,6 @@ func TestUserRepositoryFind(test *testing.T) {
 	if result.GetId().GetValue() != userId {
 		test.Errorf("Did not get expected result. Wanted user ID %q, got: %q", userId, result.GetId().GetValue())
 	}
-	for index, expectedFavorite := range favoritePokemonIds {
-		currentId := result.GetFavorites().GetValues()[index].GetValue()
-
-		if currentId != expectedFavorite {
-			test.Errorf("Did not get expected result. Wanted pokemon ID %q, got: %q", expectedFavorite, result.GetFavorites().GetValues()[0].GetValue())
-		}
-	}
 }
 
 func TestUserRepositorySave(test *testing.T) {
