@@ -1,6 +1,6 @@
 package pokemon
 
-type PokemonDetails struct {
+type PokemonDetailsDTO struct {
 	Id     int
 	Name   string
 	Height int

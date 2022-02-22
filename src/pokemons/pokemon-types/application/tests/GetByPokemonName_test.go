@@ -4,6 +4,8 @@ import (
 	"errors"
 	"testing"
 
+	shared "github.com/mdas-ds2/mdas-api-g3/src/shared/infrastructure"
+
 	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/application"
 	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
 )
@@ -11,7 +13,7 @@ import (
 type pokemonApiUnavailableMock struct{}
 
 func (pokeApiPokemonTypesRepository pokemonApiUnavailableMock) FindByPokemonName(pokemonName domain.PokemonName) (domain.TypeCollection, error) {
-	return domain.TypeCollection{}, domain.CreateRepositoryUnavailableException().GetError()
+	return domain.TypeCollection{}, shared.CreatePokemonRepositoryUnavailableException().GetError()
 }
 
 type pokemonApiRepositoryMock struct{}
@@ -92,7 +94,7 @@ func TestGetTypesByPokemonWithUnavailableRepo(test *testing.T) {
 	// Given
 	pokemonName := "pikachu"
 	repository := pokemonApiUnavailableMock{}
-	exceptionError := domain.CreateRepositoryUnavailableException().GetError().Error()
+	exceptionError := shared.CreatePokemonRepositoryUnavailableException().GetError().Error()
 
 	sut := application.GetByPokemonName{
 		Repository: repository,

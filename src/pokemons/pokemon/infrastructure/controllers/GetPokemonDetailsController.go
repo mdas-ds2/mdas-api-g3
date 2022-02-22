@@ -1,7 +1,6 @@
 package pokemon
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -27,9 +26,10 @@ func (controller getPokemonDetailsController) Handler(response http.ResponseWrit
 
 	pokemonId, error := getPokemonId(*request)
 
-	//TODO: create and return exception
 	if error != nil {
-		fmt.Print("exception !!! ")
+		response.WriteHeader(http.StatusBadRequest)
+		webserver.RespondJsonError(response, error)
+		return
 	}
 
 	pokeApiPokemonRepository := pokeApi.PokeApiPokemonRepository{}

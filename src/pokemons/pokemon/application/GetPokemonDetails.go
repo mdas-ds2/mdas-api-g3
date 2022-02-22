@@ -8,15 +8,15 @@ type GetPokemonDetails struct {
 	Repository domain.Repository
 }
 
-func (getPokemonDetails *GetPokemonDetails) Execute(pokemonId int) (PokemonDetails, error) {
+func (getPokemonDetails *GetPokemonDetails) Execute(pokemonId int) (PokemonDetailsDTO, error) {
 	id := domain.CreateId(pokemonId)
 	pokemon, error := getPokemonDetails.Repository.Find(id)
 
 	if error != nil {
-		return PokemonDetails{}, error
+		return PokemonDetailsDTO{}, error
 	}
 
-	pokemonDetail := PokemonDetails{
+	pokemonDetail := PokemonDetailsDTO{
 		pokemon.GetId().GetValue(),
 		pokemon.GetName().GetValue(),
 		pokemon.GetHeight().GetValue(),

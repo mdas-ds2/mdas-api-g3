@@ -8,7 +8,7 @@ import (
 
 type PokemonToJson struct{}
 
-func (pokemonToJson PokemonToJson) Parse(pokemon application.PokemonDetails) ([]byte, error) {
+func (pokemonToJson PokemonToJson) Parse(pokemon application.PokemonDetailsDTO) ([]byte, error) {
 	jsonRes, errorOnCreatingResponse := json.Marshal(pokemon)
 	if errorOnCreatingResponse != nil {
 		return nil, errorOnCreatingResponse

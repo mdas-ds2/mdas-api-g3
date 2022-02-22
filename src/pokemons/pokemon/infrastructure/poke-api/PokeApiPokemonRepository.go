@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
+	shared "github.com/mdas-ds2/mdas-api-g3/src/shared/infrastructure"
+
 	httpClient "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/http-client"
 	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/domain"
 )
@@ -18,7 +20,7 @@ func (repository PokeApiPokemonRepository) Find(id domain.Id) (domain.Pokemon, e
 	response, errorOnResponse := httpClient.Get(urlPath)
 
 	if response.StatusCode == http.StatusServiceUnavailable {
-		serviceUnavailableException := domain.CreatePokemonRepositoryUnavailableException()
+		serviceUnavailableException := shared.CreatePokemonRepositoryUnavailableException()
 		return domain.Pokemon{}, serviceUnavailableException.GetError()
 	}
 
