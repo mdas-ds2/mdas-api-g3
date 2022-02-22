@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 
 	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
+	pokeApiShared "github.com/mdas-ds2/mdas-api-g3/src/shared/infrastructure"
 )
 
 type PokeApiResponse = []byte
 
 func mapResponseToPokemonTypes(pokeApiResponse PokeApiResponse) (domain.TypeCollection, error) {
-	var pokemonResponse PokemonModel
+	var pokemonResponse pokeApiShared.PokemonModel
 	json.Unmarshal(pokeApiResponse, &pokemonResponse)
 
 	var pTypes = domain.TypeCollection{}

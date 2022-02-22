@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 
 	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/domain"
+	pokeApiShared "github.com/mdas-ds2/mdas-api-g3/src/shared/infrastructure"
 )
 
 type PokeApiResponse = []byte
 
 func mapResponseToPokemon(response PokeApiResponse) (domain.Pokemon, error) {
-	var pokemonResponse PokemonModel
+	var pokemonResponse pokeApiShared.PokemonModel
 	json.Unmarshal(response, &pokemonResponse)
 
 	pokeId := domain.CreateId(pokemonResponse.ID)
