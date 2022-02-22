@@ -9,8 +9,8 @@ func (user User) GetId() UserId {
 	return user.id
 }
 
-func CreateUser(id UserId, favoritePokemons PokemonIdCollection) *User {
-	user := &User{
+func CreateUser(id UserId, favoritePokemons PokemonIdCollection) User {
+	user := User{
 		id:               id,
 		favoritePokemons: favoritePokemons,
 	}
