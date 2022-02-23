@@ -1,4 +1,4 @@
-package pokeApi
+package shared
 
 // Ability is a single ability.
 type Ability struct {

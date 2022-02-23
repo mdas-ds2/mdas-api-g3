@@ -5,6 +5,7 @@ import (
 
 	httpClient "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/http-client"
 	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon-types/domain"
+	shared "github.com/mdas-ds2/mdas-api-g3/src/shared/infrastructure"
 )
 
 type PokeApiPokemonTypesRepository struct{}
@@ -17,7 +18,7 @@ func (pokeApiPokemonTypesRepository PokeApiPokemonTypesRepository) FindByPokemon
 	response, errorOnResponse := httpClient.Get(urlPath)
 
 	if response.StatusCode == http.StatusServiceUnavailable {
-		serviceUnavailableException := domain.CreateRepositoryUnavailableException()
+		serviceUnavailableException := shared.CreatePokemonRepositoryUnavailableException()
 		return domain.TypeCollection{}, serviceUnavailableException.GetError()
 	}
 

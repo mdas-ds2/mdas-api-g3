@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	webserver "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/web-server"
@@ -28,8 +27,6 @@ func (controller getTypesByPokemonName) Handler(response http.ResponseWriter, re
 	}
 
 	pokemonName := getPokemonName(*request)
-
-	fmt.Println(pokemonName)
 
 	pokeApiPokemonTypeRepository := pokeApi.PokeApiPokemonTypesRepository{}
 	getByPokemonNameUseCase := application.GetByPokemonName{
