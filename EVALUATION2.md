@@ -32,8 +32,7 @@ OK
 
 #### Separación correcta de capas (application, domain, infrastructure + BC/module/layer)
 
-- El servicio de aplicación `AddFavoritePokemon` tiene dos responsabilidades: crear un usuario y añadir un pokemon
-  favorito. Estamos incumpliendo el SRP!
+OK
 
 #### Aggregates + VOs
 
@@ -62,8 +61,8 @@ OK
 
 No
 
-**Error principal: Dos repositorios en el mismo módulo**
-**Puntuación: 25/50**
+**Error principal: No hay servicio de dominio**
+**Puntuación: 40/50**
 
 ## Facilidad setup + README (10%)
 
@@ -81,4 +80,4 @@ OK
 
 - Estáis modificando pokemon favoritos de un usuario, la URL debería ser sobre usuario no sobre favoritos.
 
-**PUNTUACIÓN FINAL: 52/100**
+**PUNTUACIÓN FINAL: 67/100**
