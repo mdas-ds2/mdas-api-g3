@@ -1,21 +1,29 @@
 version: '3.6'
 services:
-    rabbitmq:
-      image: rabbitmq:3-management-alpine
-      container_name: 'rabbitmq'
-      ports:
-        - 5672:5672
-        - 15672:15672
-      networks:
-        - pokemon_network
-    pokeapi:
-      image: pokeapiwebserver
-      container_name: 'pokeapi'
-      ports:
-        - 5001:5001
-      networks:
-        - pokemon_network
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    expose:
+      - 5672
+      - 15672
+    networks:
+      - pokemon_network
+    environment:
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_VHOST: user
+  pokeapi:
+    build: .
+    container_name: 'pokeapi'
+    ports:
+      - 5001:5001
+    expose:
+      - 5001
+    networks:
+      - pokemon_network
 networks:
   pokemon_network:
     driver: bridge
-      

@@ -15,7 +15,7 @@ func (eventPublisher RabbitMqEventPublisher) publishEvents(events []domain.Favor
 }
 
 func (eventPublisher RabbitMqEventPublisher) publishEvent(event domain.FavoritePokemonAddedEvent) error {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/user")
 
 	if err != nil {
 		return errors.New("Failed on create the connection: " + err.Error())
@@ -31,7 +31,7 @@ func (eventPublisher RabbitMqEventPublisher) publishEvent(event domain.FavoriteP
 	defer ch.Close()
 
 	q, err := ch.QueueDeclare(
-		"user",
+		"notify_favorite_pokemon_added",
 		false,
 		false,
 		false,
