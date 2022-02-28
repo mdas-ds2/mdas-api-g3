@@ -10,12 +10,24 @@ import (
 	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/domain"
 )
 
-type PokeApiPokemonRepository struct{}
+type PokeApiPokemonRepository struct {
+	cache map[string]domain.Pokemon
+}
 
 const pokeApiUrl = "https://pokeapi.co/api/v2/pokemon/"
 
+func CreatePokeApiPokemonRepository() PokeApiPokemonRepository {
+	return PokeApiPokemonRepository{make(map[string]domain.Pokemon)}
+}
+
 func (repository PokeApiPokemonRepository) Find(id domain.Id) (domain.Pokemon, error) {
-	urlPath := pokeApiUrl + strconv.Itoa(id.GetValue())
+	pokemonId := strconv.Itoa(id.GetValue())
+
+	if _, ok := repository.cache[pokemonId]; ok {
+		return repository.cache[pokemonId], nil
+	}
+
+	urlPath := pokeApiUrl + pokemonId
 
 	response, errorOnResponse := httpClient.Get(urlPath)
 
@@ -33,5 +45,13 @@ func (repository PokeApiPokemonRepository) Find(id domain.Id) (domain.Pokemon, e
 		return domain.Pokemon{}, pokemonNotFoundException.GetError()
 	}
 
-	return mapResponseToPokemon(response.Body)
+	pokemon, _ := mapResponseToPokemon(response.Body)
+	repository.cache[pokemonId] = pokemon
+
+	return pokemon, nil
+}
+
+func (repository PokeApiPokemonRepository) Save(pokemon domain.Pokemon) {
+	pokemonId := strconv.Itoa(pokemon.GetId().GetValue())
+	repository.cache[pokemonId] = pokemon
 }
