@@ -17,8 +17,8 @@ func mapResponseToPokemon(response PokeApiResponse) (domain.Pokemon, error) {
 	name := domain.CreateName(pokemonResponse.Name)
 	height := domain.CreateHeight(pokemonResponse.Height)
 	weight := domain.CreateWeight(pokemonResponse.Weight)
-
-	pokemon := domain.CreatePokemon(pokeId, name, height, weight)
+	favoriteTimesAdded := domain.CreateTimesAsFavorite(0)
+	pokemon := domain.CreatePokemon(pokeId, name, height, weight, favoriteTimesAdded)
 
 	return pokemon, nil
 }
