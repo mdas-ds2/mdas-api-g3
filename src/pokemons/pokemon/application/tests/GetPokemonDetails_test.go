@@ -21,6 +21,7 @@ func (repository PokemonRepositoryMock) Find(id domain.Id) (domain.Pokemon, erro
 		domain.CreateName(POKEMON_NAME),
 		domain.CreateHeight(POKEMON_HEIGHT),
 		domain.CreateWeight(POKEMON_WEIGHT),
+		domain.CreateTimesAsFavorite(0),
 	), nil
 }
 
