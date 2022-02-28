@@ -58,6 +58,12 @@ func (controller getPokemonDetailsController) GetPattern() string {
 }
 
 func CreateGetPokemonDetailsController() getPokemonDetailsController {
+	controller := newPokemonDetailsController()
+	go controller.listenEvents()
+	return controller
+}
+
+func newPokemonDetailsController() getPokemonDetailsController {
 	pokeApiPokemonRepository := pokeApi.CreatePokeApiPokemonRepository()
 	getByPokemonDetailsUseCase := application.GetPokemonDetails{
 		Repository: pokeApiPokemonRepository,
@@ -67,7 +73,7 @@ func CreateGetPokemonDetailsController() getPokemonDetailsController {
 	return controller
 }
 
-func (controller getPokemonDetailsController) ListenEvents() {
+func (controller getPokemonDetailsController) listenEvents() {
 	(subscribers.FavoritePokemonAddedSubscriber{}).RegisterSubscriber(controller.getByPokemonDetailsUseCase)
 }
 func getPokemonId(request http.Request) (int, error) {

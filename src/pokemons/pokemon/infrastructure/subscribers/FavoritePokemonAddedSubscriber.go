@@ -2,7 +2,6 @@ package pokemon
 
 import (
 	"errors"
-	"log"
 	"strconv"
 
 	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/application"
@@ -27,7 +26,25 @@ func (subscriber FavoritePokemonAddedSubscriber) RegisterSubscriber(useCase appl
 	}
 	defer ch.Close()
 
-	q, err := ch.QueueDeclare(
+	q, err := createQueue(ch)
+
+	if err != nil {
+		return errors.New("error setting up the connection: " + err.Error())
+	}
+
+	msgs, err := registerConsumer(ch, q.Name)
+
+	if err != nil {
+		return errors.New("failed to register a consumer: " + err.Error())
+	}
+
+	listenEvents(msgs, useCase)
+
+	return nil
+}
+
+func createQueue(channel *amqp.Channel) (amqp.Queue, error) {
+	return channel.QueueDeclare(
 		"notify_favorite_pokemon_added",
 		false,
 		false,
@@ -35,12 +52,11 @@ func (subscriber FavoritePokemonAddedSubscriber) RegisterSubscriber(useCase appl
 		false,
 		nil,
 	)
-	if err != nil {
-		return errors.New("error setting up the connection: " + err.Error())
-	}
+}
 
-	msgs, err := ch.Consume(
-		q.Name,
+func registerConsumer(channel *amqp.Channel, queueName string) (<-chan amqp.Delivery, error) {
+	return channel.Consume(
+		queueName,
 		"pokemon-detail",
 		true,
 		false,
@@ -48,24 +64,33 @@ func (subscriber FavoritePokemonAddedSubscriber) RegisterSubscriber(useCase appl
 		false,
 		nil,
 	)
+}
 
-	if err != nil {
-		return errors.New("failed to register a consumer: " + err.Error())
-	}
-
+func listenEvents(msgs <-chan amqp.Delivery, useCase application.GetPokemonDetails) {
 	forever := make(chan bool)
 
 	go func() {
 		for d := range msgs {
-			pokemonId, _ := strconv.Atoi(string(d.Body))
-			pokemon, _ := useCase.Repository.Find(domain.CreateId(pokemonId))
-			pokemon.IncreaseFavoriteTimes()
-			useCase.Repository.Save(pokemon)
-			log.Printf("pokemon favorite addetd corrrectly")
+			pokemon := findPokemon(d, useCase)
+			increaseFavoriteTimes(pokemon, useCase)
 		}
 	}()
 
 	<-forever
+}
 
-	return nil
+func findPokemon(delivery amqp.Delivery, useCase application.GetPokemonDetails) domain.Pokemon {
+	pokemonId := getPokemonId(delivery)
+	pokemon, _ := useCase.Repository.Find(pokemonId)
+	return pokemon
+}
+
+func getPokemonId(delivery amqp.Delivery) domain.Id {
+	pokemonId, _ := strconv.Atoi(string(delivery.Body))
+	return domain.CreateId(pokemonId)
+}
+
+func increaseFavoriteTimes(pokemon domain.Pokemon, useCase application.GetPokemonDetails) {
+	pokemon.IncreaseFavoriteTimes()
+	useCase.Repository.Save(pokemon)
 }
