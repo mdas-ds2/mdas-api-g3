@@ -6,5 +6,4 @@ import (
 
 type EventPublisher interface {
 	publishEvents(events []domain.FavoritePokemonAddedEvent) error
-	publishEvent(event domain.FavoritePokemonAddedEvent) error
 }

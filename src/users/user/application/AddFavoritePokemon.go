@@ -24,9 +24,9 @@ func (useCase AddFavoritePokemon) Execute(userId, pokemonId string) error {
 
 	useCase.Repository.Save(user)
 
-	event := domain.CreateFavoritePokemonAddedEvent(domain.CreatePokemonId(pokemonId))
+	events := user.GetEvents()
 
-	err = useCase.Publisher.publishEvent(event)
+	err = useCase.Publisher.publishEvents(events)
 
 	if err != nil {
 		return err

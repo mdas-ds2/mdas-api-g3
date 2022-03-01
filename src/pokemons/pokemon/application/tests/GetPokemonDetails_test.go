@@ -2,6 +2,7 @@ package pokemon_test
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/application"
@@ -24,11 +25,17 @@ func (repository PokemonRepositoryMock) Find(id domain.Id) (domain.Pokemon, erro
 		domain.CreateTimesAsFavorite(0),
 	), nil
 }
+func (repository PokemonRepositoryMock) Save(pokemon domain.Pokemon) {
+	fmt.Print("saved correctly")
+}
 
 type PokemonRepositoryFindWithErrorMock struct{}
 
 func (repository PokemonRepositoryFindWithErrorMock) Find(id domain.Id) (domain.Pokemon, error) {
 	return domain.Pokemon{}, errors.New("Not found")
+}
+func (repository PokemonRepositoryFindWithErrorMock) Save(pokemon domain.Pokemon) {
+	fmt.Print("saved correctly")
 }
 
 func TestGetPokemonDetails(test *testing.T) {

@@ -11,10 +11,6 @@ type RabbitMqEventPublisher struct {
 }
 
 func (eventPublisher RabbitMqEventPublisher) publishEvents(events []domain.FavoritePokemonAddedEvent) error {
-	return nil
-}
-
-func (eventPublisher RabbitMqEventPublisher) publishEvent(event domain.FavoritePokemonAddedEvent) error {
 	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/user")
 
 	if err != nil {
@@ -43,7 +39,17 @@ func (eventPublisher RabbitMqEventPublisher) publishEvent(event domain.FavoriteP
 		return errors.New("Failed on create the queue: " + err.Error())
 	}
 
-	err = ch.Publish(
+	for _, event := range events {
+		err := eventPublisher.publishEventMq(ch, q, event)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (eventPublisher RabbitMqEventPublisher) publishEventMq(ch *amqp.Channel, q amqp.Queue, event domain.FavoritePokemonAddedEvent) error {
+	err := ch.Publish(
 		"",
 		q.Name,
 		false,

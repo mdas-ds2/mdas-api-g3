@@ -14,6 +14,7 @@ func CreateUser(id UserId, favoritePokemons PokemonIdCollection) *User {
 	user := &User{
 		id:               id,
 		favoritePokemons: favoritePokemons,
+		events:           make([]FavoritePokemonAddedEvent, 0),
 	}
 
 	return user
@@ -43,4 +44,8 @@ func (user *User) pullDomainEvents() []FavoritePokemonAddedEvent {
 	events := user.events
 	user.events = nil
 	return events
+}
+
+func (user *User) GetEvents() []FavoritePokemonAddedEvent {
+	return user.events
 }

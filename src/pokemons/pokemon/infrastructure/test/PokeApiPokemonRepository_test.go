@@ -9,7 +9,7 @@ import (
 
 func TestFind(test *testing.T) {
 	//Given
-	repository := infrastructure.PokeApiPokemonRepository{}
+	repository := infrastructure.CreatePokeApiPokemonRepository()
 	pokemonId := domain.CreateId(25)
 
 	//When
