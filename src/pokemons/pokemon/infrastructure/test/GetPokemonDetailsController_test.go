@@ -2,7 +2,6 @@ package pokemon
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"testing"
 
@@ -20,7 +19,6 @@ func TestGetPokemonType(test *testing.T) {
 	//Then
 	pokemon := application.PokemonDetailsDTO{}
 	json.Unmarshal(httpGetType.Body, &pokemon)
-	fmt.Println(pokemon.Name)
 	if pokemon.Name != "pikachu" {
 		test.Errorf("Unexpected result getting type, expected %s received %s", "pikachu", pokemon.Name)
 	}
