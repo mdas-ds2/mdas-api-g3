@@ -7,6 +7,7 @@ import (
 	webserver "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/web-server"
 	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/application"
 	pokeApi "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/infrastructure/poke-api"
+	pokeapi "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/infrastructure/poke-api"
 	subscribers "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/infrastructure/subscribers"
 	transformers "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/infrastructure/transformers"
 )
@@ -58,13 +59,17 @@ func (controller getPokemonDetailsController) GetPattern() string {
 }
 
 func CreateGetPokemonDetailsController() getPokemonDetailsController {
-	controller := newPokemonDetailsController()
-	go controller.listenEvents()
+	pokeApiPokemonRepository := setupRepository()
+	controller := initiatePokemonDetailsController(pokeApiPokemonRepository)
+	go controller.listenEvents(pokeApiPokemonRepository)
 	return controller
 }
 
-func newPokemonDetailsController() getPokemonDetailsController {
-	pokeApiPokemonRepository := pokeApi.CreatePokeApiPokemonRepository()
+func setupRepository() pokeapi.PokeApiPokemonRepository {
+	return pokeApi.CreatePokeApiPokemonRepository()
+}
+
+func initiatePokemonDetailsController(pokeApiPokemonRepository pokeapi.PokeApiPokemonRepository) getPokemonDetailsController {
 	getByPokemonDetailsUseCase := application.GetPokemonDetails{
 		Repository: pokeApiPokemonRepository,
 	}
@@ -73,9 +78,11 @@ func newPokemonDetailsController() getPokemonDetailsController {
 	return controller
 }
 
-func (controller getPokemonDetailsController) listenEvents() {
-	(subscribers.FavoritePokemonAddedSubscriber{}).RegisterSubscriber(controller.getByPokemonDetailsUseCase)
+func (controller getPokemonDetailsController) listenEvents(pokeApiPokemonRepository pokeapi.PokeApiPokemonRepository) {
+	useCase := application.IncreasePokemonAsFavorite{Repository: pokeApiPokemonRepository}
+	(subscribers.FavoritePokemonAddedSubscriber{}).RegisterSubscriber(useCase)
 }
+
 func getPokemonId(request http.Request) (int, error) {
 	return strconv.Atoi(request.URL.Query()["id"][0])
 }

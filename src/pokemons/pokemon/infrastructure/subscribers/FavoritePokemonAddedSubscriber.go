@@ -5,14 +5,13 @@ import (
 	"strconv"
 
 	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/application"
-	domain "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/domain"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type FavoritePokemonAddedSubscriber struct {
 }
 
-func (subscriber FavoritePokemonAddedSubscriber) RegisterSubscriber(useCase application.GetPokemonDetails) error {
+func (subscriber FavoritePokemonAddedSubscriber) RegisterSubscriber(useCase application.IncreasePokemonAsFavorite) error {
 	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/user")
 
 	if err != nil {
@@ -66,31 +65,20 @@ func registerConsumer(channel *amqp.Channel, queueName string) (<-chan amqp.Deli
 	)
 }
 
-func listenEvents(msgs <-chan amqp.Delivery, useCase application.GetPokemonDetails) {
+func listenEvents(msgs <-chan amqp.Delivery, useCase application.IncreasePokemonAsFavorite) {
 	forever := make(chan bool)
 
 	go func() {
 		for d := range msgs {
-			pokemon := findPokemon(d, useCase)
-			increaseFavoriteTimes(pokemon, useCase)
+			pokemonId := getPokemonId(d)
+			useCase.Execute(pokemonId)
 		}
 	}()
 
 	<-forever
 }
 
-func findPokemon(delivery amqp.Delivery, useCase application.GetPokemonDetails) domain.Pokemon {
-	pokemonId := getPokemonId(delivery)
-	pokemon, _ := useCase.Repository.Find(pokemonId)
-	return pokemon
-}
-
-func getPokemonId(delivery amqp.Delivery) domain.Id {
+func getPokemonId(delivery amqp.Delivery) int {
 	pokemonId, _ := strconv.Atoi(string(delivery.Body))
-	return domain.CreateId(pokemonId)
-}
-
-func increaseFavoriteTimes(pokemon domain.Pokemon, useCase application.GetPokemonDetails) {
-	pokemon.IncreaseFavoriteTimes()
-	useCase.Repository.Save(pokemon)
+	return pokemonId
 }
