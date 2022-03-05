@@ -12,7 +12,7 @@ func TestAddPokemonToFavorites(test *testing.T) {
 	//Given
 	client := http.Client{}
 	postBody, _ := json.Marshal(map[string]string{
-		"pokemonId": "squirtle",
+		"pokemonId": "25",
 	})
 	postBuffered := bytes.NewBuffer(postBody)
 	req, _ := http.NewRequest("POST", "http://localhost:5001/favorite-pokemon/", postBuffered)

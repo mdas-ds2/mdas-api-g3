@@ -21,6 +21,7 @@ func (getPokemonDetails *GetPokemonDetails) Execute(pokemonId int) (PokemonDetai
 		pokemon.GetName().GetValue(),
 		pokemon.GetHeight().GetValue(),
 		pokemon.GetWeight().GetValue(),
+		pokemon.GetTimesAsFavorite().GetValue(),
 	}
 
 	return pokemonDetail, nil

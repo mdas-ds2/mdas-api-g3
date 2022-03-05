@@ -12,6 +12,7 @@ func main() {
 	pokemonTypesCommands.NewGetTypesByPokemonName().Run()
 
 	server := webServer.Create()
+
 	server.Register(pokemonTypesControllers.CreateGetTypesByPokemonName())
 	server.Register(usersControllers.CreateAddFavoritePokemonController())
 	server.Register(pokemonsControllers.CreateGetPokemonDetailsController())

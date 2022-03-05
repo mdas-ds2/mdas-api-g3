@@ -6,6 +6,7 @@ import (
 
 type AddFavoritePokemon struct {
 	Repository domain.UserRepository
+	Publisher  EventPublisher
 }
 
 func (useCase AddFavoritePokemon) Execute(userId, pokemonId string) error {
@@ -22,6 +23,14 @@ func (useCase AddFavoritePokemon) Execute(userId, pokemonId string) error {
 	}
 
 	useCase.Repository.Save(user)
+
+	events := user.GetEvents()
+
+	err = useCase.Publisher.publishEvents(events)
+
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

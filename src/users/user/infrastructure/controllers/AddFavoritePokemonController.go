@@ -49,9 +49,10 @@ func (controller addFavoritePokemonController) Handler(response http.ResponseWri
 	}
 	fmt.Println("This is the pokemonId ---> ", requestBody.PokemonId)
 	inMemoryRepo := infrastructure.CreateFavoritePokemonMemoryRepository(&InMemomyFavoritePokemonDDBB)
-
+	eventPublisher := application.RabbitMqEventPublisher{}
 	addFavoritePokemonUseCase := application.AddFavoritePokemon{
 		Repository: inMemoryRepo,
+		Publisher:  eventPublisher,
 	}
 
 	error := addFavoritePokemonUseCase.Execute(userId, requestBody.PokemonId)

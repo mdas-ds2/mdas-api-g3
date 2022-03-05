@@ -7,11 +7,14 @@ import (
 	webserver "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/web-server"
 	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/application"
 	pokeApi "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/infrastructure/poke-api"
+	pokeapi "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/infrastructure/poke-api"
+	subscribers "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/infrastructure/subscribers"
 	transformers "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/infrastructure/transformers"
 )
 
 type getPokemonDetailsController struct {
-	pattern string
+	pattern                    string
+	getByPokemonDetailsUseCase application.GetPokemonDetails
 }
 
 const POKEMON_URL_PATTERN_SEGMENT = "/pokemon/"
@@ -32,12 +35,7 @@ func (controller getPokemonDetailsController) Handler(response http.ResponseWrit
 		return
 	}
 
-	pokeApiPokemonRepository := pokeApi.PokeApiPokemonRepository{}
-	getByPokemonDetailsUseCase := application.GetPokemonDetails{
-		Repository: pokeApiPokemonRepository,
-	}
-
-	pokemon, error := getByPokemonDetailsUseCase.Execute(pokemonId)
+	pokemon, error := controller.getByPokemonDetailsUseCase.Execute(pokemonId)
 
 	if error != nil {
 		response.WriteHeader(http.StatusNotFound)
@@ -61,7 +59,28 @@ func (controller getPokemonDetailsController) GetPattern() string {
 }
 
 func CreateGetPokemonDetailsController() getPokemonDetailsController {
-	return getPokemonDetailsController{pattern: POKEMON_URL_PATTERN_SEGMENT}
+	pokeApiPokemonRepository := setupRepository()
+	controller := initiatePokemonDetailsController(pokeApiPokemonRepository)
+	go controller.listenEvents(pokeApiPokemonRepository)
+	return controller
+}
+
+func setupRepository() pokeapi.PokeApiPokemonRepository {
+	return pokeApi.CreatePokeApiPokemonRepository()
+}
+
+func initiatePokemonDetailsController(pokeApiPokemonRepository pokeapi.PokeApiPokemonRepository) getPokemonDetailsController {
+	getByPokemonDetailsUseCase := application.GetPokemonDetails{
+		Repository: pokeApiPokemonRepository,
+	}
+	controller := getPokemonDetailsController{POKEMON_URL_PATTERN_SEGMENT, getByPokemonDetailsUseCase}
+
+	return controller
+}
+
+func (controller getPokemonDetailsController) listenEvents(pokeApiPokemonRepository pokeapi.PokeApiPokemonRepository) {
+	useCase := application.IncreasePokemonAsFavorite{Repository: pokeApiPokemonRepository}
+	(subscribers.FavoritePokemonAddedSubscriber{}).RegisterSubscriber(useCase)
 }
 
 func getPokemonId(request http.Request) (int, error) {

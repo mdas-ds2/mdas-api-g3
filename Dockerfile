@@ -12,4 +12,6 @@ RUN apk add git
 
 RUN go mod download
 
-RUN go build -o main .
+RUN go build -o app .
+
+CMD ./app -getPokemonTypes pikachu

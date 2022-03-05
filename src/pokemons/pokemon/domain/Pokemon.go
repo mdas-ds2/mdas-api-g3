@@ -1,14 +1,15 @@
 package pokemon
 
 type Pokemon struct {
-	id     Id
-	name   Name
-	height Height
-	weight Weight
+	id              Id
+	name            Name
+	height          Height
+	weight          Weight
+	timesAsFavorite TimesAsFavorite
 }
 
-func CreatePokemon(id Id, name Name, height Height, weight Weight) Pokemon {
-	return Pokemon{id, name, height, weight}
+func CreatePokemon(id Id, name Name, height Height, weight Weight, timesAsFavorite TimesAsFavorite) Pokemon {
+	return Pokemon{id, name, height, weight, timesAsFavorite}
 }
 
 func (pokemon *Pokemon) GetId() Id {
@@ -25,4 +26,12 @@ func (pokemon *Pokemon) GetHeight() Height {
 
 func (pokemon *Pokemon) GetWeight() Weight {
 	return pokemon.weight
+}
+
+func (pokemon *Pokemon) GetTimesAsFavorite() TimesAsFavorite {
+	return pokemon.timesAsFavorite
+}
+
+func (pokemon *Pokemon) IncreaseFavoriteTimes() {
+	pokemon.timesAsFavorite = CreateTimesAsFavorite(pokemon.timesAsFavorite.value + 1)
 }

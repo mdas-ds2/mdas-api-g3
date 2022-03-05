@@ -1,0 +1,38 @@
+version: '3.6'
+services:
+  pokeapi:
+      build: .
+      container_name: 'pokeapi'
+      ports:
+        - 5001:5001
+      expose:
+        - 5001
+      networks:
+        - pokemon_network
+      depends_on:
+        rabbitmq:
+          condition: service_healthy
+  rabbitmq:
+    build: ./dockerFiles/rabbitmq/
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    expose:
+      - 5672
+      - 15672
+    networks:
+      - pokemon_network
+    environment:
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_VHOST: user
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+  
+networks:
+  pokemon_network:
+    driver: bridge

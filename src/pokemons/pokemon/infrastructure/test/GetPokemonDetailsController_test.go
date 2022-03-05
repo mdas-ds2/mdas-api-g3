@@ -1,9 +1,12 @@
 package pokemon
 
 import (
-	httpClient "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/http-client"
+	"encoding/json"
 
 	"testing"
+
+	httpClient "github.com/mdas-ds2/mdas-api-g3/src/generic/infrastructure/http-client"
+	application "github.com/mdas-ds2/mdas-api-g3/src/pokemons/pokemon/application"
 )
 
 func TestGetPokemonType(test *testing.T) {
@@ -14,8 +17,9 @@ func TestGetPokemonType(test *testing.T) {
 	httpGetType, _ := httpClient.Get(url)
 
 	//Then
-	result := string(httpGetType.Body)
-	if result != "{\"Id\":25,\"Name\":\"pikachu\",\"Height\":4,\"Weight\":60}" {
-		test.Errorf("Unexpected result getting the type of pikachu")
+	pokemon := application.PokemonDetailsDTO{}
+	json.Unmarshal(httpGetType.Body, &pokemon)
+	if pokemon.Name != "pikachu" {
+		test.Errorf("Unexpected result getting type, expected %s received %s", "pikachu", pokemon.Name)
 	}
 }

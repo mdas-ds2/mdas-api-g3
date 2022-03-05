@@ -1,6 +1,8 @@
-package user_test
+package user
 
 import (
+	"errors"
+	"fmt"
 	"testing"
 
 	application "github.com/mdas-ds2/mdas-api-g3/src/users/user/application"
@@ -27,14 +29,26 @@ func (repository UserRepositoryMock) Find(userId domain.UserId) domain.User {
 	return *user
 }
 
+type EventPublisherMock struct{}
+
+func (eventPublisher EventPublisherMock) publishEvents(events []domain.FavoritePokemonAddedEvent) error {
+	return nil
+}
+
+type MockSuper struct{}
+
+func (eventPublisher MockSuper) publishEvents(events []domain.FavoritePokemonAddedEvent) error {
+	fmt.Println(events)
+	return errors.New("rejkl")
+}
+
 func TestAddFavoritePokemon(test *testing.T) {
 	// Given
 	userId := "peze12038"
-	pokemonId := "chrzd918239"
+	pokemonId := "8239"
 	repository := UserRepositoryMock{}
 
-	sut := application.AddFavoritePokemon{Repository: repository}
-
+	sut := application.AddFavoritePokemon{Repository: repository, Publisher: application.PublisherMock{}}
 	// When
 	error := sut.Execute(userId, pokemonId)
 
